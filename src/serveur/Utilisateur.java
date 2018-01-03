@@ -1,5 +1,10 @@
 package serveur;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+
 public class Utilisateur {
 	
 	// ATTRIBUTS 
@@ -29,6 +34,29 @@ public class Utilisateur {
 	
 	//Methode qui va envoyer les informations vers la base de donnï¿½es.
 	public void stockageUserBDD(Utilisateur user){
+		
+		/* Connexion à la base de données */
+		String url = "A COMPLETER";
+		Connection connexion = null;
+		try {
+		    connexion = DriverManager.getConnection( url);
+
+		    /* Ici, nous placerons nos requêtes vers la BDD */
+			Statement statement = connexion.createStatement();
+			
+			int statut = statement.executeUpdate("INSERT INTO Utilisateur (ID_Utilisateur,Identifiant,MotDePasse,NomUtilisateur,PrenomUtilisateur,TypeUtilisateur) VALUES (?,?,?,?,?,?)");
+
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
+		} finally {
+		    if ( connexion != null )
+		        try {
+		            /* Fermeture de la connexion */
+		            connexion.close();
+		        } catch ( SQLException ignore ) {
+		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
+		        }
+		}
 	
 	}
 	
