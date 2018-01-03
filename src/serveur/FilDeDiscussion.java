@@ -1,9 +1,5 @@
 package serveur;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.List;
 
 public class FilDeDiscussion {
@@ -31,29 +27,7 @@ public class FilDeDiscussion {
 	//Methode qui va envoyer à la Base de données le Fil de discussion
 	public void stockageBDD( FilDeDiscussion fil)
 	{
-		/* Connexion à la base de données */
-		String url = "A COMPLETER";
-		Connection connexion = null;
-		try {
-		    connexion = DriverManager.getConnection( url);
-
-		    /* Ici, nous placerons nos requêtes vers la BDD */
-			Statement statement = connexion.createStatement();
-			
-			int statut = statement.executeUpdate("INSERT INTO FilDeDiscussion (ID_FilDeDiscussion,Titre) VALUES (?,?)");
-
-		} catch ( SQLException e ) {
-		    /* Gérer les éventuelles erreurs ici */
-		} finally {
-		    if ( connexion != null )
-		        try {
-		            /* Fermeture de la connexion */
-		            connexion.close();
-		        } catch ( SQLException ignore ) {
-		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
-		        }
-		}
-
+		
 	}
 	
 
