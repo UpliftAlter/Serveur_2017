@@ -5,8 +5,12 @@ public class Etudiant extends Utilisateur {
 	
 	
 	//CONSTRUCTEUR
-	public Etudiant(String nom, String prenom, int Id, String login, String mdp) {
-		super(nom, prenom, Id, login, mdp);
+	public Etudiant(String nom, String prenom, int id, String login, String mdp) {
+		super(nom, prenom, id, login, mdp);
+	}
+	
+	public Etudiant(String nom, String prenom){
+		super(nom,prenom);
 	}
 
 }

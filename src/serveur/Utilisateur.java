@@ -19,15 +19,26 @@ public class Utilisateur {
 		this.setMdp(mdp);
 	}
 	
+	public Utilisateur(String nom, String prenom){
+		this.setNom(nom);
+		this.setPrenom(prenom);
+	}
+	
 	
 	//METHODES
 	
-	//Methode qui va envoyer les informations vers la base de données.
+	//Methode qui va envoyer les informations vers la base de donnï¿½es.
 	public void stockageUserBDD(Utilisateur user){
 	
 	}
 	
 	
+	@Override
+	public String toString() {
+		return nom + " " + prenom;
+	}
+
+
 	//Methode Qui permet de modifier les informations de l'utilisateur
 	public void modifierInfos(Utilisateur user , String nom, String prenom, int Id, String login, String mdp) {
 		

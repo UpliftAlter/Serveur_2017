@@ -1,40 +1,51 @@
 package serveur;
 
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Groupe {
 	
+
+
 	//ATTRIBUTS
-	private TreeSet<Utilisateur> GroupeUser;
+	private List<Utilisateur> groupeUser = new ArrayList<>();
 	private String nomGroupe;
-	private int IdGroupe;
+	private int idGroupe;
 	
 	
 	
 	//CONSTRUCTEUR
-	public Groupe(TreeSet <Utilisateur> groupe, String nomGroupe , int Idgroupe)
+	public Groupe(String nomGroupe , int idgroupe)
 	{
-		this.GroupeUser=groupe;
 		this.nomGroupe=nomGroupe;
-		this.IdGroupe=Idgroupe;
+		this.idGroupe=idgroupe;
+	}
+	
+	public Groupe(String nomGroupe){
+		this.nomGroupe = nomGroupe;
 	}
 	
 	
 	//METHODES
 	
-	//Methode pour ajouter un user à un groupe
-	public void addMember(Groupe groupe, Utilisateur user){
-		
-		this.GroupeUser.add(user);
+	@Override
+	public String toString() {
+		return nomGroupe;
 	}
 	
-	//Methode pour supprimer un user à un groupe
-	public void deleteMember(Groupe groupe, Utilisateur user)
+	//Methode pour ajouter un user ï¿½ un groupe
+	public void addMember(Etudiant user)
 	{
-		this.GroupeUser.remove(user);
+		this.groupeUser.add(user);
 	}
 	
-	//Methode pour envoyer les données d'un groupe à la BDD
+	//Methode pour supprimer un user ï¿½ un groupe
+	public void deleteMember(Utilisateur user)
+	{
+		this.groupeUser.remove(user);
+	}
+	
+	//Methode pour envoyer les donnï¿½es d'un groupe ï¿½ la BDD
 	public void stockageGrpBDD(Groupe groupe)
 	{
 		
@@ -51,13 +62,16 @@ public class Groupe {
 	}
 
 	public int getIdGroupe() {
-		return IdGroupe;
+		return idGroupe;
 	}
 
 	public void setIdGroupe(int idGroupe) {
-		IdGroupe = idGroupe;
+		this.idGroupe = idGroupe;
 	}
 	
+	public List<Utilisateur> getGroupeUser(){
+		return this.groupeUser;
+	}
 	
 
 
