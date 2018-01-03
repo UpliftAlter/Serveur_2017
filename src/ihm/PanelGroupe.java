@@ -1,5 +1,7 @@
 package ihm;
 
+import java.awt.Font;
+
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
@@ -22,7 +24,9 @@ public class PanelGroupe extends JScrollPane {
     private JScrollPane listeGroupeScrollPanel = new JScrollPane();
     private JTextField rechercheTextField = new JTextField("Tapez pour rechercher");
     private DefaultListModel<Groupe> lmRef = new DefaultListModel<>();
-	
+    private Font italic = new Font(rechercheTextField.getFont().getFontName(), Font.ITALIC, rechercheTextField.getFont().getSize());
+    private Font original = rechercheTextField.getFont();
+    
     public PanelGroupe(FrameServeur frameServeur) {
         this.frameServeur = frameServeur;
     	initComponents();
@@ -34,12 +38,21 @@ public class PanelGroupe extends JScrollPane {
         listeGroupe.setModel(lmRef);
         listeGroupe.setCellRenderer(new RenduGroupeCell());
         listeGroupeScrollPanel.setViewportView(listeGroupe);
+        rechercheTextField.setFont(italic);
 
         
         //Events
         rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 rechercheTextFieldKeyPressed(evt);
+            }
+        });
+        rechercheTextField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                messageTextFieldMouseClicked(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                messageTextFieldMouseExited(evt);
             }
         });
         listeGroupe.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
@@ -77,7 +90,22 @@ public class PanelGroupe extends JScrollPane {
     //Events
     private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {   
     	recherche();
-    }          
+    }  
+    
+    private void messageTextFieldMouseClicked(java.awt.event.MouseEvent evt) {                                              
+        if (rechercheTextField.getText().equals("Tapez pour rechercher")){
+        	rechercheTextField.selectAll();
+        	rechercheTextField.setFont(original);
+
+        }
+   }                                             
+
+   private void messageTextFieldMouseExited(java.awt.event.MouseEvent evt) {                                             
+   	  if (rechercheTextField.getText().equals("")){
+   		rechercheTextField.setFont(italic);
+   		rechercheTextField.setText("Tapez pour rechercher");
+   	  }
+   }  
 
     private void listeGroupeValueChanged(javax.swing.event.ListSelectionEvent evt) {                                         
         frameServeur.getPanelUtilisateur().initModel(listeGroupe.getSelectedValue());

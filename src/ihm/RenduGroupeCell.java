@@ -21,8 +21,8 @@ class RenduGroupeCell extends DefaultListCellRenderer {
 	private Color backgroundNonSelectionColor = Color.WHITE;
 	private ImageIcon groupeIcon = new ImageIcon("groupIcon.png");
 
-	public Component getListCellRendererComponent(JList<Groupe> list,
-			Groupe value, int index, boolean selected, boolean expanded) {
+	public Component getListCellRendererComponent(JList list,
+			Object value, int index, boolean selected, boolean expanded) {
 		Image i = groupeIcon.getImage().getScaledInstance(30, -1,
 				Image.SCALE_AREA_AVERAGING);
 		if (value != null) {
