@@ -14,6 +14,8 @@ public class FrameServeur extends JFrame {
     private JMenu fichierMenu = new JMenu("Fichier");
     private JMenuBar menuBar = new JMenuBar();
     private JSplitPane splitPane = new JSplitPane();
+    private PanelGroupe panelGroupe = new PanelGroupe(this);
+    private PanelUtilisateur panelUtilisateur = new PanelUtilisateur(this);
 	
     public FrameServeur() {
         initComponents();
@@ -25,8 +27,8 @@ public class FrameServeur extends JFrame {
         setMinimumSize(new Dimension(500,400));
         setPreferredSize(new Dimension(1000,700));
         splitPane.setDividerLocation(480);
-        splitPane.setLeftComponent(new PanelGroupe());
-        splitPane.setRightComponent(new PanelUtilisateur());
+        splitPane.setLeftComponent(panelGroupe);
+        splitPane.setRightComponent(panelUtilisateur);
         menuBar.add(fichierMenu);
         setJMenuBar(menuBar);
         
@@ -47,7 +49,16 @@ public class FrameServeur extends JFrame {
         pack();
     }                     
 	//Events
+
+
 	
 	//Others
+	public PanelGroupe getPanelGroupe() {
+		return panelGroupe;
+	}
+
+	public PanelUtilisateur getPanelUtilisateur() {
+		return panelUtilisateur;
+	}
                       
 }

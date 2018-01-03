@@ -10,11 +10,12 @@ import javax.swing.ListModel;
 
 import serveur.Etudiant;
 import serveur.Groupe;
+import serveur.Utilisateur;
 
 
 @SuppressWarnings("serial")
 public class PanelGroupe extends JScrollPane {
-
+	private FrameServeur frameServeur;
     private JButton ajouterGroupeButton = new JButton("Ajouter un groupe");
     private JPanel mainPanel = new JPanel();
     private JList<Groupe>  listeGroupe = new JList<>();
@@ -22,8 +23,9 @@ public class PanelGroupe extends JScrollPane {
     private JTextField rechercheTextField = new JTextField("Tapez pour rechercher");
     private DefaultListModel<Groupe> lmRef = new DefaultListModel<>();
 	
-    public PanelGroupe() {
-        initComponents();
+    public PanelGroupe(FrameServeur frameServeur) {
+        this.frameServeur = frameServeur;
+    	initComponents();
     }
                       
     private void initComponents() {
@@ -33,7 +35,6 @@ public class PanelGroupe extends JScrollPane {
         listeGroupe.setCellRenderer(new RenduGroupeCell());
         listeGroupeScrollPanel.setViewportView(listeGroupe);
 
-
         
         //Events
         rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -41,6 +42,12 @@ public class PanelGroupe extends JScrollPane {
                 rechercheTextFieldKeyPressed(evt);
             }
         });
+        listeGroupe.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listeGroupeValueChanged(evt);
+            }
+        });
+        
 
         //Layout
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
@@ -70,32 +77,23 @@ public class PanelGroupe extends JScrollPane {
     //Events
     private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {   
     	recherche();
-    }                                                 
+    }          
+
+    private void listeGroupeValueChanged(javax.swing.event.ListSelectionEvent evt) {                                         
+        frameServeur.getPanelUtilisateur().initModel(listeGroupe.getSelectedValue());
+    }   
     
     //Other
     private void recherche(){
-    	ListModel<Groupe> lm = lmRef;
-    	Groupe[] newListTemp = new Groupe[lm.getSize()];
-    	int cpt = 0;
+    	DefaultListModel<Groupe> newModel = new DefaultListModel<>();
     	CharSequence cs = rechercheTextField.getText().toLowerCase();
-    	for (int i = 0; i < lm.getSize(); i++){
-    		String temp = lm.getElementAt(i).toString().toLowerCase();
-    		if (cs != null){
-    			if (temp.contains(cs)){
-    				newListTemp[cpt] = lm.getElementAt(i);
-    				cpt++;
-    			}
-    		}
+    	for (int i = 0; i < lmRef.getSize(); i++){
+    		String temp = lmRef.getElementAt(i).toString().toLowerCase();
+    		if (cs != null)
+    			if (temp.contains(cs))
+    				newModel.addElement(lmRef.getElementAt(i));
     	}
-    	Groupe[] newList = new Groupe[cpt];
-    	cpt = 0;
-    	for (int i = 0; i < newListTemp.length; i++)
-    		if(newListTemp[i] != null) {
-    			newList[cpt] = newListTemp[i];
-    			cpt++;
-    		}
-    		
-    	listeGroupe.setListData(newList);
+    	listeGroupe.setModel(newModel);
     	listeGroupe.repaint();
     }
     
@@ -118,6 +116,10 @@ public class PanelGroupe extends JScrollPane {
     	lmRef.addElement(g41);
     	lmRef.addElement(g42);
     	lmRef.addElement(g51);
+    }
+    
+    public Groupe groupeSelected(){
+    	return listeGroupe.getSelectedValue();
     }
 
                   

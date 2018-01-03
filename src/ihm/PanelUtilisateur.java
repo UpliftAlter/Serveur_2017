@@ -6,15 +6,13 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
-
 import serveur.Groupe;
 import serveur.Utilisateur;
 
 
 @SuppressWarnings("serial")
 public class PanelUtilisateur extends JScrollPane {
-
+	private FrameServeur frameServeur;
     private JButton ajouterGroupeButton = new JButton("Ajouter un membre");
     private JPanel mainPanel = new JPanel();
     private JList<Utilisateur>  listeUtilisateur = new JList<>();
@@ -22,26 +20,24 @@ public class PanelUtilisateur extends JScrollPane {
     private JTextField rechercheTextField = new JTextField("Tapez pour rechercher");
     private DefaultListModel<Utilisateur> lmRef = new DefaultListModel<>();
 	
-    public PanelUtilisateur() {
+    public PanelUtilisateur(FrameServeur frameServeur) {
+    	this.frameServeur = frameServeur;
         initComponents();
     }
                       
     private void initComponents() {
     	//Inits
-    	
         listeUtilisateur.setModel(lmRef);
         listeUtilisateur.setCellRenderer(new RenduUtilisateurCell());
         listeUtilisateurScrollPanel.setViewportView(listeUtilisateur);
 
-
-        
         //Events
         rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 rechercheTextFieldKeyPressed(evt);
             }
         });
-        
+
         //Layout
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -73,36 +69,26 @@ public class PanelUtilisateur extends JScrollPane {
     }                                                
     
     //Other
-                   
     private void recherche(){
-    	ListModel<Utilisateur> lm = lmRef;
-    	Utilisateur[] newListTemp = new Utilisateur[lm.getSize()];
-    	int cpt = 0;
+    	DefaultListModel<Utilisateur> newModel = new DefaultListModel<>();
     	CharSequence cs = rechercheTextField.getText().toLowerCase();
-    	for (int i = 0; i < lm.getSize(); i++){
-    		String temp = lm.getElementAt(i).toString().toLowerCase();
-    		if (cs != null){
-    			if (temp.contains(cs)){
-    				newListTemp[cpt] = lm.getElementAt(i);
-    				cpt++;
-    			}
-    		}
+    	for (int i = 0; i < lmRef.getSize(); i++){
+    		String temp = lmRef.getElementAt(i).toString().toLowerCase();
+    		if (cs != null)
+    			if (temp.contains(cs))
+    				newModel.addElement(lmRef.getElementAt(i));
     	}
-    	Utilisateur[] newList = new Utilisateur[cpt];
-    	cpt = 0;
-    	for (int i = 0; i < newListTemp.length; i++)
-    		if(newListTemp[i] != null) {
-    			newList[cpt] = newListTemp[i];
-    			cpt++;
-    		}
-    		
-    	listeUtilisateur.setListData(newList);
+    	listeUtilisateur.setModel(newModel);
     	listeUtilisateur.repaint();
     }
     
     public void initModel(Groupe g){
-    	for (Utilisateur u : g.getGroupeUser())
-    		lmRef.addElement(u);
+    	if (g != null){
+	    	lmRef.removeAllElements();
+	    	for (Utilisateur u : g.getGroupeUser())
+	    		lmRef.addElement(u);
+	    	listeUtilisateur.setModel(lmRef);
+    	}
     }
                   
 }

@@ -11,8 +11,7 @@ import javax.swing.JList;
 
 import serveur.Groupe;
 
-
-@SuppressWarnings({ "serial"})
+@SuppressWarnings({ "serial" })
 class RenduGroupeCell extends DefaultListCellRenderer {
 
 	private JLabel label = new JLabel();
@@ -20,24 +19,24 @@ class RenduGroupeCell extends DefaultListCellRenderer {
 	private Color backgroundSelectionColor = Color.BLUE;
 	private Color textNonSelectionColor = Color.BLACK;
 	private Color backgroundNonSelectionColor = Color.WHITE;
-	private ImageIcon groupeIcon = new ImageIcon ("groupIcon.png");
+	private ImageIcon groupeIcon = new ImageIcon("groupIcon.png");
 
-	public Component getListCellRendererComponent(JList list, Object value,
-			int index, boolean selected, boolean expanded) {		
-        Image i = groupeIcon.getImage().getScaledInstance(30, -1, Image.SCALE_AREA_AVERAGING);
-        
-		label.setOpaque(true);
-		label.setIcon(new ImageIcon(i));
-		label.setText(value.toString());
-
-		if (selected) {
-			label.setBackground(backgroundSelectionColor);
-			label.setForeground(textSelectionColor);
-		} else {
-			label.setBackground(backgroundNonSelectionColor);
-			label.setForeground(textNonSelectionColor);
+	public Component getListCellRendererComponent(JList<Groupe> list,
+			Groupe value, int index, boolean selected, boolean expanded) {
+		Image i = groupeIcon.getImage().getScaledInstance(30, -1,
+				Image.SCALE_AREA_AVERAGING);
+		if (value != null) {
+			label.setOpaque(true);
+			label.setIcon(new ImageIcon(i));
+			label.setText(value.toString());
+			if (selected) {
+				label.setBackground(backgroundSelectionColor);
+				label.setForeground(textSelectionColor);
+			} else {
+				label.setBackground(backgroundNonSelectionColor);
+				label.setForeground(textNonSelectionColor);
+			}
 		}
-
 		return label;
 	}
 }
