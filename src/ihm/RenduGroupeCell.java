@@ -9,8 +9,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import serveur.Groupe;
-
 @SuppressWarnings({ "serial" })
 class RenduGroupeCell extends DefaultListCellRenderer {
 
@@ -21,7 +19,7 @@ class RenduGroupeCell extends DefaultListCellRenderer {
 	private Color backgroundNonSelectionColor = Color.WHITE;
 	private ImageIcon groupeIcon = new ImageIcon("groupIcon.png");
 
-	public Component getListCellRendererComponent(JList list,
+	public Component getListCellRendererComponent(@SuppressWarnings("rawtypes") JList list,
 			Object value, int index, boolean selected, boolean expanded) {
 		Image i = groupeIcon.getImage().getScaledInstance(35, -1,
 				Image.SCALE_AREA_AVERAGING);
