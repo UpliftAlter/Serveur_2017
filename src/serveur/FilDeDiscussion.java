@@ -19,7 +19,6 @@ public class FilDeDiscussion {
 	//CONSTRUCTEUR
 	public FilDeDiscussion(String titre, int IdFil, Groupe groupe, Utilisateur createur, List<Message> listeMessage){
 		this.setCreateur(createur);
-		this.setIdFil(IdFil);
 		this.setGroupe(groupe);
 		this.setTitre(titre);
 		this.setListeMessage(listeMessage);
