@@ -43,14 +43,16 @@ public class Groupe {
 		
 		/* Connexion à la base de données */
 		String url = "A COMPLETER";
+		String username = "A COMPLETER";
+		String mdp = " A COMPLETER";
 		Connection connexion = null;
 		try {
-		    connexion = DriverManager.getConnection( url);
+		    connexion = DriverManager.getConnection( url,username,mdp);
 
 		    /* Ici, nous placerons nos requêtes vers la BDD */
 			Statement statement = connexion.createStatement();
 			
-			int statut = statement.executeUpdate("INSERT INTO APPARTENIR (ID_Utilisateur,ID_Groupe) VALUES (?,?)");
+			int statut = statement.executeUpdate("INSERT INTO APPARTENIR (ID_Utilisateur,ID_Groupe) VALUES ("+user.getIdUser()+","+this.idGroupe+";");
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */

@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-public class Utilisateur {
+public abstract class Utilisateur {
 	
 	// ATTRIBUTS 
 	private String nom ;
@@ -13,15 +13,17 @@ public class Utilisateur {
 	private int IdUser;
 	private String login;
 	private String mdp;
+	private Service service;
 	
 	
 	//CONSTRUCTEUR
-	public Utilisateur(String nom, String prenom, int Id, String login, String mdp){
+	public Utilisateur(String nom, String prenom, int Id, String login, String mdp,Service service){
 		this.setNom(nom);
 		this.setPrenom(prenom);
 		this.setIdUser(Id);
 		this.setLogin(login);
 		this.setMdp(mdp);
+		this.service=service;
 	}
 	
 	public Utilisateur(String nom, String prenom){
@@ -37,14 +39,17 @@ public class Utilisateur {
 		
 		/* Connexion à la base de données */
 		String url = "A COMPLETER";
+		String username = " A COMPLETER";
+		String mdp = "A COMPLETER";
+				
 		Connection connexion = null;
 		try {
-		    connexion = DriverManager.getConnection( url);
+		    connexion = DriverManager.getConnection( url,username,mdp);
 
 		    /* Ici, nous placerons nos requêtes vers la BDD */
 			Statement statement = connexion.createStatement();
 			
-			int statut = statement.executeUpdate("INSERT INTO Utilisateur (ID_Utilisateur,Identifiant,MotDePasse,NomUtilisateur,PrenomUtilisateur,TypeUtilisateur) VALUES (?,?,?,?,?,?)");
+			int statut = statement.executeUpdate("INSERT INTO Utilisateur (ID_Utilisateur,Identifiant,MotDePasse,NomUtilisateur,PrenomUtilisateur,TypeUtilisateur) VALUES ("+this.IdUser+","+this.login+","+this.mdp+","+this.nom+","+this.prenom+","+this.service+";");
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
