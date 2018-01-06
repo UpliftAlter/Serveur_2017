@@ -2,7 +2,10 @@ package serveur;
 
 public enum Service {
 	ADMINISTRATIF,
-	TECHNIQUE
+	TECHNIQUE,
+	ETUDIANT,
+	ENSEIGNANT
+	
 
 
 }
