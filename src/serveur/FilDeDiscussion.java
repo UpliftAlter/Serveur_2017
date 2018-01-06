@@ -32,15 +32,17 @@ public class FilDeDiscussion {
 	public void stockageBDD( FilDeDiscussion fil)
 	{
 		/* Connexion à la base de données */
-		String url = "A COMPLETER";
+		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
+		String username = "root";
+		String mdp = "root";
 		Connection connexion = null;
 		try {
-		    connexion = DriverManager.getConnection( url);
+		    connexion = DriverManager.getConnection(url,username,mdp);
 
 		    /* Ici, nous placerons nos requêtes vers la BDD */
 			Statement statement = connexion.createStatement();
 			
-			int statut = statement.executeUpdate("INSERT INTO FilDeDiscussion (ID_FilDeDiscussion,Titre) VALUES (?,?)");
+			int statut = statement.executeUpdate("INSERT INTO FilDeDiscussion (ID_FilDeDiscussion,Titre) VALUES ('"+this.IdFil+"','"+this.titre+"';");
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */

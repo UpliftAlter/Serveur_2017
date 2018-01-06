@@ -9,8 +9,7 @@ public class Agent extends Utilisateur {
 	
 	//CONSTRUCTEUR
 	public Agent(String nom, String prenom, int Id, String login, String mdp, Service service) {
-		super(nom, prenom, Id, login, mdp);
-		this.setService(service);
+		super(nom, prenom, Id, login, mdp,service);
 	}
 
 
