@@ -49,7 +49,7 @@ public abstract class Utilisateur {
 		    /* Ici, nous placerons nos requêtes vers la BDD */
 			Statement statement = connexion.createStatement();
 			
-			int statut = statement.executeUpdate("INSERT INTO Utilisateur (ID_Utilisateur,Identifiant,MotDePasse,NomUtilisateur,PrenomUtilisateur,TypeUtilisateur) VALUES ("+this.IdUser+","+this.login+","+this.mdp+","+this.nom+","+this.prenom+","+this.service+";");
+			int statut = statement.executeUpdate("INSERT INTO Utilisateur (ID_Utilisateur,Identifiant,MotDePasse,NomUtilisateur,PrenomUtilisateur,TypeUtilisateur) VALUES ('"+this.IdUser+"','"+this.login+"','"+this.mdp+","+this.nom+","+this.prenom+","+this.service+";");
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
@@ -79,8 +79,7 @@ public abstract class Utilisateur {
 	
 	//Methode qui verifie les credentials
 	public void login(Utilisateur user){
-		
-	}
+			}
 
     // GETTERS AND SETTERS
 	public String getNom() {
