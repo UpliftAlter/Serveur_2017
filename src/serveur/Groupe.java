@@ -74,10 +74,9 @@ public class Groupe {
 	public void deleteMember(Utilisateur user)
 	{
 		
-		/* Connexion à la base de données */
-		String url = "A COMPLETER";
-		String username = "A COMPLETER";
-		String mdp =" A COMPLETER";
+		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
+		String username = "root";
+		String mdp = "root";
 		Connection connexion = null;
 		try {
 		    connexion = DriverManager.getConnection( url,username,mdp);
@@ -107,9 +106,9 @@ public class Groupe {
 	public void stockageGrpBDD(Groupe groupe)
 	{
 		/* Connexion à la base de données */
-		String url = "A COMPLETER";
-		String username= " A COMPLETER";
-		String mdp = "A COMPLETER";
+		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
+		String username = "root";
+		String mdp = "root";
 		Connection connexion = null;
 		try {
 		    connexion = DriverManager.getConnection( url,username,mdp);
