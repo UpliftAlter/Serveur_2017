@@ -1,70 +1,69 @@
 package serveur;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.TreeSet;
+
 public class Serveur {
 
-	private String adresse;
-	private int port;
-	private int socket;
-	private Message tobroad;
+	private String adress;
+	private int port = 7777;
+	private ServerSocket server;
+	private TreeSet<Groupe> allGroups = new TreeSet<>();
+	private TreeSet<Utilisateur> allUsers = new TreeSet<>();
 	
-	//CONSTRUCTEUR
-	public Serveur(String adresse , int port, int socket, Message tobroad){
-		this.setAdresse(adresse);
-		this.setPort(port);
-		this.setSocket(socket);
-		this.setTobroad(tobroad);
-	}
+	//Network part
+	private ArrayList<Socket> allSockets = new ArrayList<>();
+	private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
 	
-	//METHODES
-	
-	//Methode qui va Broadcast un message 
-	public void broadcast(Message tobroad){
-		
-	}
-	
-	//Methode pour lancer l'attente active
-	public void ecoute ()
-	{
-		
-	}
-	
-	//Methode pour envoyer un message
-	public void envoyerMessage ()
-	{
-		
-	}
 
+	//CONSTRUCTEUR
+	public Serveur() throws IOException{
+		server = new ServerSocket(port);
+		System.out.println("Server is running...");
+		listeningConnections();
+	}
+	
+	//METHODE
+	public void listeningConnections () throws IOException
+	{
+		while(true){
+			Socket enteringClient = server.accept();
+			allSockets.add(enteringClient);
+			
+			//add user in list
+			
+			Thread t = new Thread(new Tube(this, enteringClient));
+			t.start();
+		}
+	}
 	
 	//GETTERS AND SETTERS
-	public String getAdresse() {
-		return adresse;
-	}
-
-	public void setAdresse(String adresse) {
-		this.adresse = adresse;
+	public String getAdress() {
+		return adress;
 	}
 
 	public int getPort() {
 		return port;
 	}
 
-	public void setPort(int port) {
-		this.port = port;
+	public TreeSet<Groupe> getAllGroups() {
+		return allGroups;
 	}
 
-	public int getSocket() {
-		return socket;
+	public TreeSet<Utilisateur> getAllUsers() {
+		return allUsers;
 	}
 
-	public void setSocket(int socket) {
-		this.socket = socket;
+	public ArrayList<Socket> getAllSockets() {
+		return allSockets;
 	}
 
-	public Message getTobroad() {
-		return tobroad;
+	public ArrayList<Utilisateur> getOnlineUsers() {
+		return onlineUsers;
 	}
-
-	public void setTobroad(Message tobroad) {
-		this.tobroad = tobroad;
-	}
+	
+	
 }

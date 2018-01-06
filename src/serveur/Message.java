@@ -8,19 +8,24 @@ public class Message {
 
 	private Date date;
 	private String msg;
-	private int IdEmetteur;
-	private int Idfil;
+	private int idEmetteur;
+	private int idfil;
 	private Utilisateur createur;
 	
 	
 	//CONSTRUCTEUR
-	public Message(Date date,String msg, int IdEmetteur, int Idfil, Utilisateur createur )
+	public Message(String msg, int idEmetteur, int idfil, Utilisateur createur )
 	{
-		this.setDate(date);
+		this.date = new Date();
 		this.setMsg(msg);
-		this.setIdEmetteur(IdEmetteur);
-		this.setIdfil(Idfil);
+		this.setIdEmetteur(idEmetteur);
+		this.setIdfil(idfil);
 		this.setCreateur(createur);
+	}
+	
+	public Message (String msg){
+		this.date = new Date();
+		this.msg = msg;
 	}
 	
 	//METHODES
@@ -51,19 +56,19 @@ public class Message {
 	}
 
 	public int getIdEmetteur() {
-		return IdEmetteur;
+		return idEmetteur;
 	}
 
 	public void setIdEmetteur(int idEmetteur) {
-		IdEmetteur = idEmetteur;
+		this.idEmetteur = idEmetteur;
 	}
 
 	public int getIdfil() {
-		return Idfil;
+		return idfil;
 	}
 
 	public void setIdfil(int idfil) {
-		Idfil = idfil;
+		this.idfil = idfil;
 	}
 
 	public Utilisateur getCreateur() {

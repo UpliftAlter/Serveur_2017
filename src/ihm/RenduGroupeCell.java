@@ -23,7 +23,7 @@ class RenduGroupeCell extends DefaultListCellRenderer {
 
 	public Component getListCellRendererComponent(JList list,
 			Object value, int index, boolean selected, boolean expanded) {
-		Image i = groupeIcon.getImage().getScaledInstance(30, -1,
+		Image i = groupeIcon.getImage().getScaledInstance(35, -1,
 				Image.SCALE_AREA_AVERAGING);
 		if (value != null) {
 			label.setOpaque(true);
