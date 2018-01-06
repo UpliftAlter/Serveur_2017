@@ -8,6 +8,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilisateur.Agent;
+import utilisateur.Enseignant;
+import utilisateur.Etudiant;
+import utilisateur.Service;
+import utilisateur.Utilisateur;
+
 public class Groupe {
 	
 
@@ -183,7 +189,7 @@ public class Groupe {
 		 int IdUser;
 		 String login;
 		 String mdp;
-		 Service service;
+		 String service;
 		
 		
 		/* Connexion à la base de données */
@@ -206,9 +212,9 @@ public class Groupe {
 				IdUser = resultat.getInt("ID_Utilisateur");
 				login = resultat.getString("Identifiant");
 				mdp = resultat.getString("Mot_De_Passe");
-				service = (Service) resultat.getObject("TypeUtilisateur");
+				service = resultat.getString("TypeUtilisateur");
 				
-				if(service == Service.ETUDIANT)
+				if(service == "ETUDIANT")
 				{
 					Etudiant etudiant = new Etudiant(nom, prenom, IdUser, login, mdp);
 					listeUser.add(etudiant);
