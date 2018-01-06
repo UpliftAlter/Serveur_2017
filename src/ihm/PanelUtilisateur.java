@@ -9,12 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
-import serveur.Groupe;
-import serveur.Utilisateur;
+import utilisateur.Groupe;
+import utilisateur.Utilisateur;
 
 
 @SuppressWarnings("serial")
 public class PanelUtilisateur extends JScrollPane {
+	@SuppressWarnings("unused")
 	private FrameServeur frameServeur;
     private JButton ajouterGroupeButton = new JButton("Ajouter un membre");
     private JPanel mainPanel = new JPanel();
@@ -112,7 +113,7 @@ public class PanelUtilisateur extends JScrollPane {
     public void initModel(Groupe g){
     	if (g != null){
 	    	lmRef.removeAllElements();
-	    	for (Utilisateur u : g.getGroupeUser())
+	    	for (Utilisateur u : g.getListeUtilisateur())
 	    		lmRef.addElement(u);
 	    	listeUtilisateur.setModel(lmRef);
     	}

@@ -8,11 +8,9 @@ import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 
-import serveur.Etudiant;
-import serveur.Groupe;
-import serveur.Utilisateur;
+import utilisateur.Etudiant;
+import utilisateur.Groupe;
 
 
 @SuppressWarnings("serial")

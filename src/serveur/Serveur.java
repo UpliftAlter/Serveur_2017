@@ -6,6 +6,9 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.TreeSet;
 
+import utilisateur.Groupe;
+import utilisateur.Utilisateur;
+
 public class Serveur {
 
 	private String adress;

@@ -8,8 +8,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
-import serveur.Utilisateur;
-
 @SuppressWarnings({ "serial" })
 class RenduUtilisateurCell extends DefaultListCellRenderer {
 	private JLabel label = new JLabel();
@@ -18,7 +16,7 @@ class RenduUtilisateurCell extends DefaultListCellRenderer {
 	private ImageIcon userVert = new ImageIcon("userVert.png");
 	private ImageIcon[] tabIcon = { userBleu, userRouge, userVert };
 
-	public Component getListCellRendererComponent(JList list, Object value,
+	public Component getListCellRendererComponent(@SuppressWarnings("rawtypes") JList list, Object value,
 			int index, boolean selected, boolean expanded) {
 		Image i = tabIcon[index % 3].getImage().getScaledInstance(30, -1,
 				Image.SCALE_AREA_AVERAGING);
