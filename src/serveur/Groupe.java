@@ -2,6 +2,7 @@ package serveur;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class Groupe {
 		    /* Ici, nous placerons nos requêtes vers la BDD */
 			Statement statement = connexion.createStatement();
 			
-			int statut = statement.executeUpdate("DELETE FROM APPARTENIR (ID_Utilisateur,ID_Groupe) WHERE (ID_Utilisateur ='"+user.getIdUser()+"'and'"+ this.idGroupe+"';");
+			int statut = statement.executeUpdate("DELETE FROM Appartenir (ID_Utilisateur,ID_Groupe) WHERE (ID_Utilisateur ='"+user.getIdUser()+"'and'"+ this.idGroupe+"';");
 
 		} catch ( SQLException e ) {
 		    /* Gérer les éventuelles erreurs ici */
@@ -102,8 +103,8 @@ public class Groupe {
 	}
 	
 	
-	//Methode pour envoyer les donnï¿½es d'un groupe ï¿½ la BDD
-	public void stockageGrpBDD(Groupe groupe)
+	//Methode pour envoyer les donnï¿½es d'un groupe ï¿½ la BDD ECRITURE
+	public void stockageGrpBDD()
 	{
 		/* Connexion à la base de données */
 		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
@@ -129,6 +130,116 @@ public class Groupe {
 		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
 		        }
 		}
+	}
+	
+	//Requete pour obtenir la liste de tout les GROUPES
+	public List <Groupe> retrieveAllGroups () {
+		
+		List <Groupe> listeGroupe = new ArrayList<Groupe>();
+		String nomgroupe;
+		int idgroupe;
+		
+		
+		/* Connexion à la base de données */
+		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
+		String username = "root";
+		String mdp = "root";
+		Connection connexion = null;
+		try {
+		    connexion = DriverManager.getConnection( url,username,mdp);
+
+		    /* Ici, nous placerons nos requêtes vers la BDD */
+			Statement statement = connexion.createStatement();
+			
+			ResultSet resultat = statement.executeQuery("SELECT (ID_GROUPE) , (Nom_Groupe) FROM Groupe ;");
+			while(resultat.next())
+			{
+				idgroupe = resultat.getInt("ID_GROUPE");
+				nomgroupe=resultat.getString("Nom_Groupe");
+				Groupe groupetest = new Groupe(nomgroupe,idgroupe);
+				listeGroupe.add(groupetest);
+			}
+
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
+		} finally {
+		    if ( connexion != null )
+		        try {
+		            /* Fermeture de la connexion */
+		            connexion.close();
+		        } catch ( SQLException ignore ) {
+		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
+		        }
+		}
+		return listeGroupe;
+	}
+	
+	//RENVOIE LA LISTE DES PERSONNES  FESANT PARTIE DUN GROUPE
+	public List <Utilisateur> retriveUsersFromGroupe() {
+		
+		List <Utilisateur> listeUser = new ArrayList();
+		 String nom ;
+		 String prenom;
+		 int IdUser;
+		 String login;
+		 String mdp;
+		 Service service;
+		
+		
+		/* Connexion à la base de données */
+		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
+		String username = "root";
+		String mdp1 = "root";
+		Connection connexion = null;
+		try {
+		    connexion = DriverManager.getConnection( url,username,mdp1);
+
+		    /* Ici, nous placerons nos requêtes vers la BDD */
+			Statement statement = connexion.createStatement();
+			
+			ResultSet resultat = statement.executeQuery("SELECT * FROM utilisateur as U WHERE U.ID_UTILISATEUR IN (SELECT ID_UTILISATEUR FROM appartenir WHERE ID_GROUPE ='"+this.idGroupe+"';");
+			
+			while(resultat.next())
+			{
+				nom = resultat.getString("Nom_Utilisateur");
+				prenom = resultat.getString("Prenom_Utilisateur");
+				IdUser = resultat.getInt("ID_Utilisateur");
+				login = resultat.getString("Identifiant");
+				mdp = resultat.getString("Mot_De_Passe");
+				service = (Service) resultat.getObject("TypeUtilisateur");
+				
+				if(service == Service.ETUDIANT)
+				{
+					Etudiant etudiant = new Etudiant(nom, prenom, IdUser, login, mdp);
+					listeUser.add(etudiant);
+				}
+				else if (service == Service.ENSEIGNANT)
+				{
+					Enseignant enseignant = new Enseignant(nom, prenom, IdUser, login, mdp);
+					listeUser.add(enseignant);
+				}
+				else
+				{
+					Agent agent = new Agent(nom, prenom, IdUser, login, mdp, service);
+					listeUser.add(agent);
+				}
+		
+			}
+		
+
+		} catch ( SQLException e ) {
+		    /* Gérer les éventuelles erreurs ici */
+		} finally {
+		    if ( connexion != null )
+		        try {
+		            /* Fermeture de la connexion */
+		            connexion.close();
+		        } catch ( SQLException ignore ) {
+		            /* Si une erreur survient lors de la fermeture, il suffit de l'ignorer. */
+		        }
+		}
+		
+		return listeUser;
 	}
 	
 	
