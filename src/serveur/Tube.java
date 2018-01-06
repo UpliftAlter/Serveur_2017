@@ -32,8 +32,10 @@ public class Tube implements Runnable {
 			inputFromClient = new ObjectInputStream(socket.getInputStream());
 			while (true) {
 				checkConnection();
-				message = (Message) inputFromClient.readObject();
-				broadcast(server.getAllSockets(), message);
+				if (inputFromClient.available() > 0) {
+					message = (Message) inputFromClient.readObject();
+					broadcast(server.getAllSockets(), message);
+				}
 			}
 
 		} catch (IOException e) {
@@ -44,16 +46,17 @@ public class Tube implements Runnable {
 			try {
 				socket.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 
-	public void broadcast(List<Socket> list, Message tobroad) throws IOException {
-		for (Socket stemp : list){
+	public void broadcast(List<Socket> list, Message tobroad)
+			throws IOException {
+		for (Socket stemp : list) {
 			outputToClient = new ObjectOutputStream(stemp.getOutputStream());
 			outputToClient.writeObject(tobroad);
+			outputToClient.flush();
 		}
 	}
 }

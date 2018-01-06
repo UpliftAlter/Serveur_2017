@@ -31,6 +31,7 @@ public class Serveur {
 	{
 		while(true){
 			Socket enteringClient = server.accept();
+			System.out.println("Someone conenct");
 			allSockets.add(enteringClient);
 			
 			//add user in list
