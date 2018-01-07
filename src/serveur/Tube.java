@@ -23,38 +23,36 @@ public class Tube implements Runnable {
 		List<Socket> allSocketsTemp = server.getAllSockets();
 		if (!socket.isConnected())
 			for (Socket stemp : allSocketsTemp)
-				if (stemp.equals(socket))
+				if (stemp.equals(socket)) {
 					allSocketsTemp.remove(stemp);
+					System.out.println("Someone has disconnected");
+				}
 	}
 
 	@Override
 	public void run() {
 		try {
-			
 			while (true) {
 				checkConnection();
-				inputFromClient = new ObjectInputStream(socket.getInputStream());
-				Object temp = inputFromClient.readObject();
-				if (temp != null) {
-					if (temp instanceof Message) {
-						Message message = (Message) temp;
-						broadcast(server.getAllSockets(), message);
+				if (socket.isConnected()) {
+					inputFromClient = new ObjectInputStream(
+							socket.getInputStream());
+					Object temp = inputFromClient.readObject();
+					if (temp != null) {
+						if (temp instanceof Message) {
+							Message message = (Message) temp;
+							broadcast(server.getAllSockets(), message);
+						}
 					}
 				}
-
 			}
 
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} finally {
-			try {
-				socket.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
+		
 	}
 
 	public void broadcast(List<Socket> list, Message tobroad)

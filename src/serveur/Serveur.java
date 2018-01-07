@@ -37,7 +37,7 @@ public class Serveur {
 	{
 		while(true){
 			Socket enteringClient = server.accept();
-			System.out.println("Someone conenct");
+			System.out.println("Someone is connected");
 			allSockets.add(enteringClient);
 			
 			//add user in list
@@ -79,7 +79,10 @@ public class Serveur {
 	public void disconnect() throws IOException{
 		if (!allSockets.isEmpty())
 			for (Socket s : allSockets)
-				s.close();
+				if(s.isConnected())
+					s.close();
+			
+				
 		if (server != null)
 			server.close();
 	}
