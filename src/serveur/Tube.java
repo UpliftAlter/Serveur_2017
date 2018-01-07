@@ -30,10 +30,10 @@ public class Tube implements Runnable {
 	@Override
 	public void run() {
 		try {
-			inputFromClient = new ObjectInputStream(socket.getInputStream());
+			
 			while (true) {
 				checkConnection();
-
+				inputFromClient = new ObjectInputStream(socket.getInputStream());
 				Object temp = inputFromClient.readObject();
 				if (temp != null) {
 					if (temp instanceof Message) {

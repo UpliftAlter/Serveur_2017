@@ -43,13 +43,16 @@ public class FrameServeur extends JFrame {
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
 			public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+
 				try {
-					serveur.getSocket().close();
+					serveur.disconnect();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} finally {
+					System.exit(0);
 				}
-				dispose();
+
 			}
 		});
 

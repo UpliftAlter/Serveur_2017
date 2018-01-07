@@ -6,8 +6,6 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
 
 import utilisateur.Groupe;
 import utilisateur.Utilisateur;
@@ -76,6 +74,14 @@ public class Serveur {
 	
 	public ServerSocket getSocket(){
 		return server;
+	}
+	
+	public void disconnect() throws IOException{
+		if (!allSockets.isEmpty())
+			for (Socket s : allSockets)
+				s.close();
+		if (server != null)
+			server.close();
 	}
 	
 }
