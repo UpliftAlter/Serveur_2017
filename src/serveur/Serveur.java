@@ -1,9 +1,12 @@
 package serveur;
 
+import ihm.FrameServeur;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.TreeSet;
 
 import utilisateur.Groupe;
@@ -14,8 +17,8 @@ public class Serveur {
 	private String adress;
 	private int port = 7777;
 	private ServerSocket server;
-	private TreeSet<Groupe> allGroups = new TreeSet<>();
-	private TreeSet<Utilisateur> allUsers = new TreeSet<>();
+	private ArrayList<Groupe> allGroups = new ArrayList<>();
+	private ArrayList<Utilisateur> allUsers = new ArrayList<>();
 	
 	//Network part
 	private ArrayList<Socket> allSockets = new ArrayList<>();
@@ -26,6 +29,8 @@ public class Serveur {
 	public Serveur() throws IOException{
 		server = new ServerSocket(port);
 		System.out.println("Server is running...");
+		FrameServeur fs = new FrameServeur(this);
+		fs.setVisible(true);
 		listeningConnections();
 	}
 	
@@ -53,11 +58,11 @@ public class Serveur {
 		return port;
 	}
 
-	public TreeSet<Groupe> getAllGroups() {
+	public ArrayList<Groupe> getAllGroups() {
 		return allGroups;
 	}
 
-	public TreeSet<Utilisateur> getAllUsers() {
+	public ArrayList<Utilisateur> getAllUsers() {
 		return allUsers;
 	}
 
@@ -69,5 +74,8 @@ public class Serveur {
 		return onlineUsers;
 	}
 	
+	public ServerSocket getSocket(){
+		return server;
+	}
 	
 }

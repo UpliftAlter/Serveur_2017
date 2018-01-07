@@ -32,6 +32,7 @@ public class PanelGroupe extends JScrollPane {
                       
     private void initComponents() {
     	//Inits
+    	test();
     	initModel();
         listeGroupe.setModel(lmRef);
         listeGroupe.setCellRenderer(new RenduGroupeCell());
@@ -123,7 +124,7 @@ public class PanelGroupe extends JScrollPane {
     	listeGroupe.repaint();
     }
     
-    public void initModel(){
+    private void test(){
     	Groupe g31 = new Groupe("TAD 3.1");
     	Groupe g32 = new Groupe("TAD 3.2");
     	Groupe g41 = new Groupe("TAD 4.1");
@@ -137,11 +138,17 @@ public class PanelGroupe extends JScrollPane {
     	g41.addMember(new Etudiant("Qiu", "Jr"));
     	g41.addMember(new Etudiant("Sydney", "quoi"));
     	
-    	lmRef.addElement(g31);
-    	lmRef.addElement(g32);
-    	lmRef.addElement(g41);
-    	lmRef.addElement(g42);
-    	lmRef.addElement(g51);
+    	frameServeur.getServeur().getAllGroups().add(g31);
+    	frameServeur.getServeur().getAllGroups().add(g32);
+    	frameServeur.getServeur().getAllGroups().add(g41);
+    	frameServeur.getServeur().getAllGroups().add(g42);
+    	frameServeur.getServeur().getAllGroups().add(g51);
+    }
+    
+    public void initModel(){
+    	if (!frameServeur.getServeur().getAllGroups().isEmpty())
+    		for (Groupe g : frameServeur.getServeur().getAllGroups())
+    			lmRef.addElement(g);
     }
     
     public Groupe groupeSelected(){

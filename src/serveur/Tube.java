@@ -13,7 +13,6 @@ public class Tube implements Runnable {
 	private Socket socket;
 	private ObjectInputStream inputFromClient;
 	private ObjectOutputStream outputToClient;
-	private Message message;
 
 	public Tube(Serveur server, Socket s) {
 		this.server = server;
@@ -34,10 +33,15 @@ public class Tube implements Runnable {
 			inputFromClient = new ObjectInputStream(socket.getInputStream());
 			while (true) {
 				checkConnection();
-				if (inputFromClient.available() > 0) {
-					message = (Message) inputFromClient.readObject();
-					broadcast(server.getAllSockets(), message);
+
+				Object temp = inputFromClient.readObject();
+				if (temp != null) {
+					if (temp instanceof Message) {
+						Message message = (Message) temp;
+						broadcast(server.getAllSockets(), message);
+					}
 				}
+
 			}
 
 		} catch (IOException e) {
