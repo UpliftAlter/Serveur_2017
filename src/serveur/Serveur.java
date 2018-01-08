@@ -42,7 +42,7 @@ public class Serveur {
 	public void listeningConnections() throws IOException {
 		while (true) {
 			Socket enteringClient = server.accept();
-			System.out.println("Someone is connected");
+			System.out.println("Someone has connected");
 			allSockets.add(enteringClient);
 
 			// add user in list
@@ -82,25 +82,7 @@ public class Serveur {
 	}
 
 	public void disconnect() throws IOException {
-		if (!allSockets.isEmpty())
-			for (Socket s : allSockets)
-				if (s.isConnected())
-					try {
-
-						s.close();
-					} catch (Exception e) {
-						System.out.println("ERREUR INTERCEPTÉE");
-						e.printStackTrace();
-					}
-
-		if (server != null)
-			try {
-
-				server.close();
-			} catch (Exception e) {
-				System.out.println("ERREUR INTERCEPTÉE");
-				e.printStackTrace();
-			}
+		server.close();
 	}
 
 	private void initAllGroups() {

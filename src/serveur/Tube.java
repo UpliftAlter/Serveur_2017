@@ -19,21 +19,11 @@ public class Tube implements Runnable {
 		this.socket = s;
 	}
 
-	public void checkConnection() {
-		List<Socket> allSocketsTemp = server.getAllSockets();
-		if (!socket.isConnected())
-			for (Socket stemp : allSocketsTemp)
-				if (stemp.equals(socket)) {
-					allSocketsTemp.remove(stemp);
-					System.out.println("Someone has disconnected");
-				}
-	}
-
 	@Override
 	public void run() {
 		try {
 			while (true) {
-				checkConnection();
+				System.out.println(server.getAllSockets());
 				if (socket.isConnected()) {
 					inputFromClient = new ObjectInputStream(
 							socket.getInputStream());
@@ -48,15 +38,20 @@ public class Tube implements Runnable {
 			}
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("Someone has disconnected");
+			server.getAllSockets().remove(socket);
+			System.out.println(server.getAllSockets());
+			
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("Class non connu");
 		}
 		
 	}
 
 	public void broadcast(List<Socket> list, Message tobroad)
 			throws IOException {
+		
+		System.out.println(list);
 		for (Socket stemp : list) {
 			outputToClient = new ObjectOutputStream(stemp.getOutputStream());
 			outputToClient.writeObject(tobroad);
