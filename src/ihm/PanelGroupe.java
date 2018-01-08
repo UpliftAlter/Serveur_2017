@@ -32,7 +32,6 @@ public class PanelGroupe extends JScrollPane {
                       
     private void initComponents() {
     	//Inits
-    	test();
     	initModel();
         listeGroupe.setModel(lmRef);
         listeGroupe.setCellRenderer(new RenduGroupeCell());
@@ -124,7 +123,8 @@ public class PanelGroupe extends JScrollPane {
     	listeGroupe.repaint();
     }
     
-    private void test(){
+    @SuppressWarnings("unused")
+	private void test(){
     	Groupe g31 = new Groupe("TAD 3.1");
     	Groupe g32 = new Groupe("TAD 3.2");
     	Groupe g41 = new Groupe("TAD 4.1");
