@@ -148,6 +148,9 @@ public class PanelGroupe extends JScrollPane {
     
     public void initModel(){
     	DefaultListModel<Groupe> temp = new DefaultListModel<Groupe>();
+    	Groupe groupeTemp = new Groupe("Tous les utilisateurs");
+    	groupeTemp.getListeUtilisateur().addAll(frameServeur.getAllUsers());
+    	temp.addElement(groupeTemp);
     	if (!frameServeur.getServeur().getAllGroups().isEmpty())
     		for (Groupe g : frameServeur.getServeur().getAllGroups())
     			temp.addElement(g);

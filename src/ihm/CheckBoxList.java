@@ -3,6 +3,7 @@ package ihm;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.DefaultListModel;
@@ -52,5 +53,13 @@ public class CheckBoxList extends JList<JCheckBox> {
 		lmRef.addElement(checkBox);
 		this.setModel(lmRef);
 		this.repaint();
+	}
+	
+	public List<Utilisateur> getElementsSelected(List<Utilisateur> listRef){
+		List<Utilisateur> listToReturn = new ArrayList<>();
+		for (int i = 0; i < this.getModel().getSize(); i++)
+			if (this.getModel().getElementAt(i).isSelected())
+				listToReturn.add(listRef.get(i));
+		return listToReturn;
 	}
 }

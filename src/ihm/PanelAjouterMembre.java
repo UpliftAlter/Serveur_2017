@@ -1,6 +1,9 @@
 package ihm;
 
+import java.io.IOException;
+
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 public class PanelAjouterMembre extends JFrame {
     private javax.swing.JButton ajouterButton;
@@ -34,7 +37,17 @@ public class PanelAjouterMembre extends JFrame {
                 ajouterButtonActionPerformed(evt);
             }
         });
-        
+		annulerButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				annulerButtonActionPerformed(evt);
+			}
+		});
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+              dispose();
+            }
+        });
         
         //Layout
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(mainPanel);
@@ -78,8 +91,12 @@ public class PanelAjouterMembre extends JFrame {
     }// </editor-fold>                        
 
     private void ajouterButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
-        // TODO add your handling code here:
-    }                                             
+        cbl.getElementsSelected(frameServeur.getAllUsers());
+        dispose();
+    }      
+    private void annulerButtonActionPerformed(java.awt.event.ActionEvent evt) {                                              
+        dispose();
+    }    
                  
 
                   
