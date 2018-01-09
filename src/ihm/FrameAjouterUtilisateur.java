@@ -321,8 +321,6 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 				break;
 			}
 
-			DB db = new DB();
-			// db.addUserBD(u);
 			frameServeur.getServeur().addUser(u);
 			frameServeur.getPanelGroupe().getGroupeSelected().addMember(u);
 			frameServeur.getPanelUtilisateur().initModel(
@@ -340,9 +338,9 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	}
 
 	private boolean checkFields() {
-		return !isEmptyField(nomTextField) || !isEmptyField(passwordTextField)
-				|| !isEmptyField(prenomTextField)
-				|| !isEmptyField(usernameTextField);
+		return !isEmptyField(nomTextField) && !isEmptyField(passwordTextField)
+				&& !isEmptyField(prenomTextField)
+				&& !isEmptyField(usernameTextField);
 	}
 
 	private boolean isEmptyField(JTextField j) {
