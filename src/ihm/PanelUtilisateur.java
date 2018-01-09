@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -17,7 +18,7 @@ import utilisateur.Utilisateur;
 public class PanelUtilisateur extends JScrollPane {
 	@SuppressWarnings("unused")
 	private FrameServeur frameServeur;
-    private JButton ajouterGroupeButton = new JButton("Ajouter un membre");
+    private JButton ajouterMembreButton = new JButton("Ajouter un membre");
     private JPanel mainPanel = new JPanel();
     private JList<Utilisateur>  listeUtilisateur = new JList<>();
     private JScrollPane listeUtilisateurScrollPanel = new JScrollPane();
@@ -25,6 +26,7 @@ public class PanelUtilisateur extends JScrollPane {
     private DefaultListModel<Utilisateur> lmRef = new DefaultListModel<>();
     private Font italic = new Font(rechercheTextField.getFont().getFontName(), Font.ITALIC, rechercheTextField.getFont().getSize());
     private Font original = rechercheTextField.getFont();
+	private PanelAjouterMembre panelAjouterMembre;
 	
     public PanelUtilisateur(FrameServeur frameServeur) {
     	this.frameServeur = frameServeur;
@@ -33,6 +35,7 @@ public class PanelUtilisateur extends JScrollPane {
                       
     private void initComponents() {
     	//Inits
+    	panelAjouterMembre = new PanelAjouterMembre(frameServeur);
         listeUtilisateur.setModel(lmRef);
         listeUtilisateur.setCellRenderer(new RenduUtilisateurCell());
         listeUtilisateurScrollPanel.setViewportView(listeUtilisateur);
@@ -53,6 +56,11 @@ public class PanelUtilisateur extends JScrollPane {
                 messageTextFieldMouseExited(evt);
             }
         });
+        ajouterMembreButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajouterMembreButtonActionPerformed(evt);
+            }
+        });
         //Layout
         javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
         mainPanel.setLayout(mainPanelLayout);
@@ -62,7 +70,7 @@ public class PanelUtilisateur extends JScrollPane {
                 .addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(rechercheTextField, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
                     .addComponent(listeUtilisateurScrollPanel, javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(ajouterGroupeButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(ajouterMembreButton, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, 0))
         );
         mainPanelLayout.setVerticalGroup(
@@ -72,7 +80,7 @@ public class PanelUtilisateur extends JScrollPane {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(listeUtilisateurScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 402, Short.MAX_VALUE)
                 .addGap(16, 16, 16)
-                .addComponent(ajouterGroupeButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(ajouterMembreButton, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -96,6 +104,10 @@ public class PanelUtilisateur extends JScrollPane {
    		rechercheTextField.setText("Tapez pour rechercher");
    	  }
    }  
+   
+   private void ajouterMembreButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+	   	panelAjouterMembre.setVisible(true);
+   }    
     //Other
     private void recherche(){
     	DefaultListModel<Utilisateur> newModel = new DefaultListModel<>();

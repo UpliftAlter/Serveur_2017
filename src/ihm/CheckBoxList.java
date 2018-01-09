@@ -3,12 +3,15 @@ package ihm;
 import java.awt.Component;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JCheckBox;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
+
+import utilisateur.Utilisateur;
 
 @SuppressWarnings("serial")
 public class CheckBoxList extends JList<JCheckBox> {
@@ -39,6 +42,12 @@ public class CheckBoxList extends JList<JCheckBox> {
 		}
 	}
 
+	public void initModel(List<Utilisateur> list){
+		for(Utilisateur u : list)
+			lmRef.addElement(new JCheckBox(u.toString()));
+		this.setModel(lmRef);
+	}
+	
 	public void addCheckbox(JCheckBox checkBox) {
 		lmRef.addElement(checkBox);
 		this.setModel(lmRef);

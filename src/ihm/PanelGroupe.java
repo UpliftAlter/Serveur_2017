@@ -5,6 +5,7 @@ import java.awt.Font;
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
@@ -32,14 +33,19 @@ public class PanelGroupe extends JScrollPane {
                       
     private void initComponents() {
     	//Inits
+    	test();
     	initModel();
-        listeGroupe.setModel(lmRef);
         listeGroupe.setCellRenderer(new RenduGroupeCell());
         listeGroupeScrollPanel.setViewportView(listeGroupe);
         rechercheTextField.setFont(italic);
 
         
         //Events
+        ajouterGroupeButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ajouterGroupeButtonActionPerformed(evt);
+            }
+        });
         rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 rechercheTextFieldKeyPressed(evt);
@@ -109,6 +115,13 @@ public class PanelGroupe extends JScrollPane {
         frameServeur.getPanelUtilisateur().initModel(listeGroupe.getSelectedValue());
     }   
     
+    private void ajouterGroupeButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                    
+    	String tempS = JOptionPane.showInputDialog("Nom du groupe: ");
+    	if (tempS != null)
+    		frameServeur.getServeur().getAllGroups().add(new Groupe(tempS));
+    	initModel();
+    }    
+    
     //Other
     private void recherche(){
     	DefaultListModel<Groupe> newModel = new DefaultListModel<>();
@@ -125,35 +138,26 @@ public class PanelGroupe extends JScrollPane {
     
     @SuppressWarnings("unused")
 	private void test(){
-    	Groupe g31 = new Groupe("TAD 3.1");
-    	Groupe g32 = new Groupe("TAD 3.2");
-    	Groupe g41 = new Groupe("TAD 4.1");
-    	Groupe g42 = new Groupe("TAD 4.2");
-    	Groupe g51 = new Groupe("TAD 5.1");
-    	
-    	g31.addMember(new Etudiant("Ruben", "Le connard"));
-    	g32.addMember(new Etudiant("Mael", "le suceur"));
-    	g32.addMember(new Etudiant("Agathe", "the whore attention"));
-    	g41.addMember(new Etudiant("Fablyat", "Mofolyat"));
-    	g41.addMember(new Etudiant("Qiu", "Jr"));
-    	g41.addMember(new Etudiant("Sydney", "quoi"));
-    	
-    	frameServeur.getServeur().getAllGroups().add(g31);
-    	frameServeur.getServeur().getAllGroups().add(g32);
-    	frameServeur.getServeur().getAllGroups().add(g41);
-    	frameServeur.getServeur().getAllGroups().add(g42);
-    	frameServeur.getServeur().getAllGroups().add(g51);
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Mouloud"));
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Castre"));
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Merde"));
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Cule"));
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Bonbeurre"));
+    	frameServeur.getAllUsers().add(new Etudiant("Jean", "Neymar"));
     }
     
     public void initModel(){
+    	DefaultListModel<Groupe> temp = new DefaultListModel<Groupe>();
     	if (!frameServeur.getServeur().getAllGroups().isEmpty())
     		for (Groupe g : frameServeur.getServeur().getAllGroups())
-    			lmRef.addElement(g);
+    			temp.addElement(g);
+    	lmRef = temp;
+    	listeGroupe.setModel(lmRef);
+    	listeGroupe.repaint();
     }
     
     public Groupe groupeSelected(){
     	return listeGroupe.getSelectedValue();
     }
-
                   
 }

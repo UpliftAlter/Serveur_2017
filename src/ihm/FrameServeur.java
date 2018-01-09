@@ -1,8 +1,8 @@
 package ihm;
 
 import java.awt.Dimension;
-import java.awt.event.WindowEvent;
 import java.io.IOException;
+import java.util.List;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -10,6 +10,8 @@ import javax.swing.JMenuBar;
 import javax.swing.JSplitPane;
 
 import serveur.Serveur;
+import utilisateur.Groupe;
+import utilisateur.Utilisateur;
 
 @SuppressWarnings("serial")
 public class FrameServeur extends JFrame {
@@ -86,5 +88,17 @@ public class FrameServeur extends JFrame {
 	public Serveur getServeur() {
 		return serveur;
 	}
+	
+	public List<Utilisateur> getAllUsers(){
+		return serveur.getAllUsers();
+	}
+	
+	public List<Groupe> getAllGroups(){
+		return serveur.getAllGroups();
+	}
+
+
+	
+	
 
 }
