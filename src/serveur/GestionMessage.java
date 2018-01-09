@@ -1,6 +1,7 @@
 package serveur;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 import utilisateur.DB;
 import utilisateur.DataBaseException;
@@ -61,6 +62,16 @@ public class GestionMessage {
 			//ENVOYER MESSAGE UTILISATEUR ????
 			e.printStackTrace();
 		}
+	}
+	
+	//GESTION LOGIN
+	public Utilisateur checklogin(Message message)
+	{
+		Scanner scanner=new Scanner(message.getMsg()).useDelimiter("#");
+		Utilisateur user;
+		user = this.database.login(scanner.next(), scanner.next());
+		scanner.close();
+		return user;
 	}
 	
 	
