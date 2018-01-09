@@ -1,5 +1,7 @@
 package serveur;
 
+import ihm.FrameServeur;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,18 +12,17 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
-import ihm.FrameServeur;
+import utilisateur.DB;
 import utilisateur.Etudiant;
 import utilisateur.Groupe;
 import utilisateur.Utilisateur;
 
 public class Serveur {
-
-	private String adress;
 	private int port = 7777;
 	private ServerSocket server;
 	private ArrayList<Groupe> allGroups = new ArrayList<>();
 	private ArrayList<Utilisateur> allUsers = new ArrayList<>();
+	private DB database = new DB();
 
 	// Network part
 	private ArrayList<Socket> allSockets = new ArrayList<>();
@@ -53,9 +54,6 @@ public class Serveur {
 	}
 
 	// GETTERS AND SETTERS
-	public String getAdress() {
-		return adress;
-	}
 
 	public int getPort() {
 		return port;
@@ -85,6 +83,20 @@ public class Serveur {
 		server.close();
 	}
 
+	public void addGroup(Groupe g) {
+		if (!allGroups.contains(g)) {
+			allGroups.add(g);
+			database.addGroupBD(g);
+		}
+	}
+
+	public void addUser(Utilisateur u) {
+		if (!allUsers.contains(u)) {
+			allUsers.add(u);
+			database.addUserBD(u);
+		}
+	}
+
 	private void initAllGroups() {
 		String url = "jdbc:mysql://localhost:3306/base_de_donnees_neocampus?autoReconnect=true&useSSL=false";
 		String username = "root";
@@ -95,7 +107,8 @@ public class Serveur {
 			connexion = DriverManager.getConnection(url, username, mdp);
 
 			Statement statement = connexion.createStatement();
-			ResultSet resultat1 = statement.executeQuery("SELECT * FROM GROUPE");
+			ResultSet resultat1 = statement
+					.executeQuery("SELECT * FROM GROUPE");
 
 			while (resultat1.next()) {
 				int numGroupe = resultat1.getInt("ID_GROUPE");
@@ -125,7 +138,8 @@ public class Serveur {
 					Utilisateur u = null;
 					switch (type) {
 					case "ETUDIANT":
-						u = new Etudiant(nom, prenom, mdp2, identifiant, id_utilisateur);
+						u = new Etudiant(nom, prenom, mdp2, identifiant,
+								id_utilisateur);
 						break;
 
 					default:
@@ -161,7 +175,8 @@ public class Serveur {
 			connexion = DriverManager.getConnection(url, username, mdp);
 
 			Statement statement = connexion.createStatement();
-			ResultSet resultat1 = statement.executeQuery("SELECT * FROM Utilisateur");
+			ResultSet resultat1 = statement
+					.executeQuery("SELECT * FROM Utilisateur");
 
 			while (resultat1.next()) {
 				int numGroupe = resultat1.getInt("ID_UTILISATEUR");

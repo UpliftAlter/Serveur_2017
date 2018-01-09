@@ -44,9 +44,11 @@ public class CheckBoxList extends JList<JCheckBox> {
 	}
 
 	public void initModel(List<Utilisateur> list){
+		DefaultListModel<JCheckBox> temp = new DefaultListModel<JCheckBox>();
 		for(Utilisateur u : list)
-			lmRef.addElement(new JCheckBox(u.toString()));
-		this.setModel(lmRef);
+			temp.addElement(new JCheckBox(u.toString()));
+		this.setModel(temp);
+		lmRef = temp;
 	}
 	
 	public void addCheckbox(JCheckBox checkBox) {
@@ -62,4 +64,9 @@ public class CheckBoxList extends JList<JCheckBox> {
 				listToReturn.add(listRef.get(i));
 		return listToReturn;
 	}
+
+	public DefaultListModel<JCheckBox> getLmRef() {
+		return lmRef;
+	}	
+	
 }

@@ -96,9 +96,4 @@ public class FrameServeur extends JFrame {
 	public List<Groupe> getAllGroups(){
 		return serveur.getAllGroups();
 	}
-
-
-	
-	
-
 }
