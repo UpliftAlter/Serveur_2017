@@ -9,7 +9,6 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import utilisateur.Agent;
-import utilisateur.DB;
 import utilisateur.Enseignant;
 import utilisateur.Etudiant;
 import utilisateur.TypeUtilisateur;

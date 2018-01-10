@@ -42,7 +42,6 @@ public class PanelGroupe extends JScrollPane {
 
 	private void initComponents() {
 		// Inits
-		test();
 		initModel();
 		listeGroupe.setCellRenderer(new RenduGroupeCell());
 		listeGroupeScrollPanel.setViewportView(listeGroupe);
@@ -225,20 +224,9 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	@SuppressWarnings("unused")
-	private void test() {
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Mouloud"));
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Castre"));
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Merde"));
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Cule"));
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Bonbeurre"));
-		frameServeur.getAllUsers().add(new Etudiant("Jean", "Neymar"));
-	}
 
 	public void initModel() {
 		DefaultListModel<Groupe> temp = new DefaultListModel<Groupe>();
-		Groupe groupeTemp = new Groupe("Tous les utilisateurs");
-		groupeTemp.getListeUtilisateur().addAll(frameServeur.getAllUsers());
-		temp.addElement(groupeTemp);
 		if (!frameServeur.getServeur().getAllGroups().isEmpty())
 			for (Groupe g : frameServeur.getServeur().getAllGroups())
 				temp.addElement(g);
