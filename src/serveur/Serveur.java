@@ -107,8 +107,8 @@ public class Serveur {
 			}
 		}
 	}
-	
-	public void removeUser(Utilisateur u){
+
+	public void removeUser(Utilisateur u) {
 		allUsers.remove(u);
 		try {
 			database.removeUserBD(u);
@@ -117,13 +117,13 @@ public class Serveur {
 			e.printStackTrace();
 		}
 	}
-	
-	public void removeUserFromGroup(Groupe g, Utilisateur u){
+
+	public void removeUserFromGroup(Groupe g, Utilisateur u) {
 		g.deleteMember(u);
 		database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
 	}
-	
-	public void removeGroup(Groupe g){
+
+	public void removeGroup(Groupe g) {
 		allGroups.remove(g);
 		try {
 			database.removeGroupBD(g.getIdGroupe());
@@ -135,10 +135,14 @@ public class Serveur {
 
 	private void initAllGroups() {
 		allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();
+
+		for (Groupe groupe : allGroups) {
+			groupe.initMembers(database.getUsersFromGroup(groupe.getIdGroupe()));
+		}
 	}
 
 	private void initAllUsers() {
-		database.getAllGroupsBD();
+		allUsers = (ArrayList<Utilisateur>) database.getAllUsers();
 	}
 
 }
