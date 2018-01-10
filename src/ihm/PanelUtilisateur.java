@@ -185,6 +185,7 @@ public class PanelUtilisateur extends JScrollPane {
 			java.awt.event.ActionEvent evt) {
 		if (!addMemberOrAddUser) {
 			panelAjouterUtilisateur.setVisible(true);
+			panelAjouterUtilisateur.resettextFields();
 		} else {
 			panelAjouterMembre.setVisible(true);
 			panelAjouterMembre.getCbl().initModel(frameServeur.getAllUsers());

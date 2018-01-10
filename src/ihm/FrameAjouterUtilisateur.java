@@ -43,6 +43,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 		initComboBox();
 		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 		setResizable(false);
+		getRootPane().setDefaultButton(creerButton);
 
 		// Events
 		creerButton.addActionListener(new java.awt.event.ActionListener() {
@@ -283,12 +284,18 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 
 	private void autoUsernameButtonActionPerformed(
 			java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		if(!isEmptyField(nomTextField) && !isEmptyField(prenomTextField)){
+			String temp = prenomTextField.getText().toLowerCase().trim()+"."+nomTextField.getText().toLowerCase().trim();
+			String temp2 = temp.replaceAll("[-\\s]", "");
+			usernameTextField.setText(temp2);
+		}else {
+			JOptionPane.showMessageDialog(frameServeur, "Remplissez le nom et le prenom");
+		}
 	}
 
 	private void autoPasswordButtonActionPerformed(
 			java.awt.event.ActionEvent evt) {
-		// TODO add your handling code here:
+		passwordTextField.setText(new RandomString(6).nextString());
 	}
 
 	private void creerButtonActionPerformed(java.awt.event.ActionEvent evt) {
@@ -373,5 +380,12 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 			break;
 		}
 		return temp;
+	}
+	
+	public void resettextFields(){
+		nomTextField.setText("");
+		prenomTextField.setText("");
+		usernameTextField.setText("");
+		passwordTextField.setText("");
 	}
 }

@@ -51,10 +51,10 @@ public class PanelGroupe extends JScrollPane {
 
 		// Events
 		supprimer.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                supprimerActionPerformed(evt);
-            }
-        });
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				supprimerActionPerformed(evt);
+			}
+		});
 		ajouterGroupeButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,10 +84,9 @@ public class PanelGroupe extends JScrollPane {
 				});
 		listeGroupe.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
-					int index = listeGroupe.locationToIndex(evt.getPoint());
-					listeGroupe.setSelectedIndex(index);
-				if (SwingUtilities.isRightMouseButton(evt)
-						&& !isFirstGroup()) {
+				int index = listeGroupe.locationToIndex(evt.getPoint());
+				listeGroupe.setSelectedIndex(index);
+				if (SwingUtilities.isRightMouseButton(evt) && !isFirstGroup()) {
 
 					doPop(evt);
 				}
@@ -154,13 +153,13 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	// Events
-    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) { 
-    	Groupe temp = listeGroupe.getSelectedValue();
-    	frameServeur.getServeur().removeGroup(temp);
-    	lmRef.removeElement(temp);
-    	listeGroupe.repaint();
-    }
-    
+	private void supprimerActionPerformed(java.awt.event.ActionEvent evt) {
+		Groupe temp = listeGroupe.getSelectedValue();
+		frameServeur.getServeur().removeGroup(temp);
+		lmRef.removeElement(temp);
+		listeGroupe.repaint();
+	}
+
 	private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
 		recherche();
 	}
@@ -195,17 +194,23 @@ public class PanelGroupe extends JScrollPane {
 	public void ajouterGroupeButtonActionPerformed(
 			java.awt.event.ActionEvent evt) {
 		String tempS = JOptionPane.showInputDialog("Nom du groupe: ");
-		if (tempS != null)
-			frameServeur.getServeur().addGroup(new Groupe(tempS));
-		initModel();
+		if (tempS != null) {
+			if (!tempS.equals("")) {
+				frameServeur.getServeur().addGroup(new Groupe(tempS));
+			} else {
+				JOptionPane.showMessageDialog(frameServeur,
+						"Le nom ne peut etre vide !");
+			}
+			initModel();
+		}
 		getVerticalScrollBar().setValue(getVerticalScrollBar().getMaximum());
 	}
 
 	// Other
-    public void doPop (MouseEvent e){
-        popupMenu.show(e.getComponent(), e.getX(), e.getY());
-    }
-    
+	public void doPop(MouseEvent e) {
+		popupMenu.show(e.getComponent(), e.getX(), e.getY());
+	}
+
 	private void recherche() {
 		DefaultListModel<Groupe> newModel = new DefaultListModel<>();
 		CharSequence cs = rechercheTextField.getText().toLowerCase();
@@ -241,10 +246,10 @@ public class PanelGroupe extends JScrollPane {
 		listeGroupe.setModel(lmRef);
 		listeGroupe.repaint();
 	}
-	
-	public boolean isFirstGroup(){
+
+	public boolean isFirstGroup() {
 		return listeGroupe.getSelectedValue().getNomGroupe()
-		.equals("Tous les utilisateurs");
+				.equals("Tous les utilisateurs");
 	}
 
 	public Groupe getGroupeSelected() {

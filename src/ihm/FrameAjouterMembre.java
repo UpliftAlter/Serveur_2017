@@ -38,6 +38,8 @@ public class FrameAjouterMembre extends JFrame {
 		setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
 		checkBoxPanel.setViewportView(cbl);
 		setResizable(false);
+		getRootPane().setDefaultButton(ajouterButton);
+		rechercheTextField.setEnabled(false);
 
 		// Events
 		ajouterButton.addActionListener(new java.awt.event.ActionListener() {
@@ -167,8 +169,8 @@ public class FrameAjouterMembre extends JFrame {
 		if (rechercheTextField.getText().equals("Tapez pour rechercher")) {
 			rechercheTextField.selectAll();
 			rechercheTextField.setFont(original);
-
 		}
+		JOptionPane.showMessageDialog(frameServeur,	"Achetez la version prenium pour debloquer cette fonctionnalite");
 	}
 
 	private void messageTextFieldMouseExited(java.awt.event.MouseEvent evt) {
