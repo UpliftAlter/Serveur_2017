@@ -29,7 +29,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	private JTextField prenomTextField = new JTextField();
 	private JLabel usernameLabel = new JLabel("Username:");
 	private JTextField usernameTextField = new JTextField();
-	private JLabel statusLabel = new JLabel("Status:");
+	private JLabel statusLabel = new JLabel("Statut:");
 	private JComboBox<String> statusComboBox = new JComboBox<>();
 	private FrameServeur frameServeur;
 

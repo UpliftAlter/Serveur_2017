@@ -107,6 +107,31 @@ public class Serveur {
 			}
 		}
 	}
+	
+	public void removeUser(Utilisateur u){
+		allUsers.remove(u);
+		try {
+			database.removeUserBD(u);
+		} catch (DataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void removeUserFromGroup(Groupe g, Utilisateur u){
+		g.deleteMember(u);
+		database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
+	}
+	
+	public void removeGroup(Groupe g){
+		allGroups.remove(g);
+		try {
+			database.removeGroupBD(g.getIdGroupe());
+		} catch (DataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	private void initAllGroups() {
 		allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();

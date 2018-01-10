@@ -1,21 +1,29 @@
 package ihm;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import utilisateur.Etudiant;
 import utilisateur.Groupe;
+import utilisateur.Utilisateur;
 
 @SuppressWarnings("serial")
 public class PanelGroupe extends JScrollPane {
 	private FrameServeur frameServeur;
+	private JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem supprimer = new JMenuItem("Supprimer");
 	private JButton ajouterGroupeButton = new JButton("Ajouter un groupe");
 	private JPanel mainPanel = new JPanel();
 	private JList<Groupe> listeGroupe = new JList<>();
@@ -39,8 +47,14 @@ public class PanelGroupe extends JScrollPane {
 		listeGroupe.setCellRenderer(new RenduGroupeCell());
 		listeGroupeScrollPanel.setViewportView(listeGroupe);
 		rechercheTextField.setFont(italic);
+		popupMenu.add(supprimer);
 
 		// Events
+		supprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supprimerActionPerformed(evt);
+            }
+        });
 		ajouterGroupeButton
 				.addActionListener(new java.awt.event.ActionListener() {
 					public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -68,7 +82,17 @@ public class PanelGroupe extends JScrollPane {
 						listeGroupeValueChanged(evt);
 					}
 				});
+		listeGroupe.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+					int index = listeGroupe.locationToIndex(evt.getPoint());
+					listeGroupe.setSelectedIndex(index);
+				if (SwingUtilities.isRightMouseButton(evt)
+						&& !isFirstGroup()) {
 
+					doPop(evt);
+				}
+			}
+		});
 		// Layout
 		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(
 				mainPanel);
@@ -130,6 +154,13 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	// Events
+    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) { 
+    	Groupe temp = listeGroupe.getSelectedValue();
+    	frameServeur.getServeur().removeGroup(temp);
+    	lmRef.removeElement(temp);
+    	listeGroupe.repaint();
+    }
+    
 	private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
 		recherche();
 	}
@@ -154,15 +185,14 @@ public class PanelGroupe extends JScrollPane {
 		frameServeur.getPanelUtilisateur().initModel(
 				listeGroupe.getSelectedValue());
 		if (listeGroupe.getSelectedValue() != null)
-			if (listeGroupe.getSelectedValue().toString()
-					.equals("Tous les utilisateurs")) {
+			if (isFirstGroup()) {
 				frameServeur.getPanelUtilisateur().setAddUsers();
 			} else {
 				frameServeur.getPanelUtilisateur().setAddMembers();
 			}
 	}
 
-	private void ajouterGroupeButtonActionPerformed(
+	public void ajouterGroupeButtonActionPerformed(
 			java.awt.event.ActionEvent evt) {
 		String tempS = JOptionPane.showInputDialog("Nom du groupe: ");
 		if (tempS != null)
@@ -172,6 +202,10 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	// Other
+    public void doPop (MouseEvent e){
+        popupMenu.show(e.getComponent(), e.getX(), e.getY());
+    }
+    
 	private void recherche() {
 		DefaultListModel<Groupe> newModel = new DefaultListModel<>();
 		CharSequence cs = rechercheTextField.getText().toLowerCase();
@@ -206,6 +240,11 @@ public class PanelGroupe extends JScrollPane {
 		lmRef = temp;
 		listeGroupe.setModel(lmRef);
 		listeGroupe.repaint();
+	}
+	
+	public boolean isFirstGroup(){
+		return listeGroupe.getSelectedValue().getNomGroupe()
+		.equals("Tous les utilisateurs");
 	}
 
 	public Groupe getGroupeSelected() {

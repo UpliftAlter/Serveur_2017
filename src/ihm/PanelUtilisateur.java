@@ -1,13 +1,18 @@
 package ihm;
 
 import java.awt.Font;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.SwingUtilities;
 
 import utilisateur.Groupe;
 import utilisateur.Utilisateur;
@@ -16,6 +21,8 @@ import utilisateur.Utilisateur;
 public class PanelUtilisateur extends JScrollPane {
 	@SuppressWarnings("unused")
 	private FrameServeur frameServeur;
+	private JPopupMenu popupMenu = new JPopupMenu();
+	private JMenuItem supprimer = new JMenuItem("Supprimer");
 	private JButton ajouterMembreButton = new JButton(
 			"Creer un nouveau utilisateur");
 	private JPanel mainPanel = new JPanel();
@@ -45,8 +52,14 @@ public class PanelUtilisateur extends JScrollPane {
 		listeUtilisateur.setCellRenderer(new RenduUtilisateurCell());
 		listeUtilisateurScrollPanel.setViewportView(listeUtilisateur);
 		rechercheTextField.setFont(italic);
+		popupMenu.add(supprimer);
 
 		// Events
+		supprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supprimerActionPerformed(evt);
+            }
+        });
 		rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				rechercheTextFieldKeyPressed(evt);
@@ -67,6 +80,15 @@ public class PanelUtilisateur extends JScrollPane {
 						ajouterMembreButtonActionPerformed(evt);
 					}
 				});
+		listeUtilisateur.addMouseListener(new MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int index = listeUtilisateur.locationToIndex(evt.getPoint());
+				listeUtilisateur.setSelectedIndex(index);
+				if(SwingUtilities.isRightMouseButton(evt) && listeUtilisateur.getSelectedValue() != null)
+					doPop(evt);
+			}
+		});
+
 		// Layout
 		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(
 				mainPanel);
@@ -128,6 +150,18 @@ public class PanelUtilisateur extends JScrollPane {
 	}
 
 	// Events
+    private void supprimerActionPerformed(java.awt.event.ActionEvent evt) { 
+    	Utilisateur temp = listeUtilisateur.getSelectedValue();
+		if (!addMemberOrAddUser) {
+			frameServeur.getServeur().removeUser(temp);
+		} else {
+			frameServeur.getServeur().removeUserFromGroup(frameServeur.getPanelGroupe().getGroupeSelected(), temp);
+		}
+    	
+    	lmRef.removeElement(temp);
+    	listeUtilisateur.repaint();
+    }
+    
 	private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
 		recherche();
 	}
@@ -147,7 +181,7 @@ public class PanelUtilisateur extends JScrollPane {
 		}
 	}
 
-	private void ajouterMembreButtonActionPerformed(
+	public void ajouterMembreButtonActionPerformed(
 			java.awt.event.ActionEvent evt) {
 		if (!addMemberOrAddUser) {
 			panelAjouterUtilisateur.setVisible(true);
@@ -158,6 +192,10 @@ public class PanelUtilisateur extends JScrollPane {
 	}
 
 	// Other
+    public void doPop (MouseEvent e){
+        popupMenu.show(e.getComponent(), e.getX(), e.getY());
+    }
+    
 	private void recherche() {
 		DefaultListModel<Utilisateur> newModel = new DefaultListModel<>();
 		CharSequence cs = rechercheTextField.getText().toLowerCase();
@@ -167,6 +205,7 @@ public class PanelUtilisateur extends JScrollPane {
 				if (temp.contains(cs))
 					newModel.addElement(lmRef.getElementAt(i));
 		}
+		
 		listeUtilisateur.setModel(newModel);
 		listeUtilisateur.repaint();
 	}
@@ -184,11 +223,13 @@ public class PanelUtilisateur extends JScrollPane {
 		setAddMemberOrAddUser(false);
 		ajouterMembreButton.setEnabled(true);
 		ajouterMembreButton.setText("Creer un nouveau utilisateur");
+		frameServeur.setUserButtonEnable();
 	}
 
 	public void setAddMembers() {
 		setAddMemberOrAddUser(true);
 		ajouterMembreButton.setEnabled(true);
+		frameServeur.setMemberButtonEnable();
 		ajouterMembreButton.setText("Ajouter un membre");
 	}
 

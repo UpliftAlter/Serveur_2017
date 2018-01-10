@@ -6,7 +6,6 @@ import java.util.Scanner;
 import utilisateur.DB;
 import utilisateur.DataBaseException;
 import utilisateur.FilDeDiscussion;
-import utilisateur.Groupe;
 import utilisateur.Message;
 import utilisateur.Utilisateur;
 
@@ -47,22 +46,7 @@ public class GestionMessage {
 	}
 	
 	//TRAITEMENT CREATION DE TICKET
-	public void creationTicket(Message message, FilDeDiscussion fil)
-	{
-		try{
-			this.database.addFilDeDiscussion(fil);
-		} catch (DataBaseException e){
-			//ENVOYER MESSAGE UTILISATEUR?????
-			e.printStackTrace();
-	}
-		
-		try {
-			this.tube.broadcast(this.server.getAllSockets(), message);
-		} catch (IOException e) {
-			//ENVOYER MESSAGE UTILISATEUR ????
-			e.printStackTrace();
-		}
-	}
+
 	
 	//GESTION LOGIN
 	public Utilisateur checklogin(Message message)

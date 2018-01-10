@@ -14,7 +14,7 @@ class RenduGroupeCell extends DefaultListCellRenderer {
 
 	private JLabel label = new JLabel();
 	private Color textSelectionColor = Color.BLACK;
-	private Color backgroundSelectionColor = Color.BLUE;
+	private Color backgroundSelectionColor = new Color(204, 230, 255);
 	private Color textNonSelectionColor = Color.BLACK;
 	private Color backgroundNonSelectionColor = Color.WHITE;
 	private ImageIcon groupeIcon = new ImageIcon("groupIcon.png");
