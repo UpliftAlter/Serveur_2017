@@ -13,6 +13,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import utilisateur.DB;
+import utilisateur.DataBaseException;
 import utilisateur.Etudiant;
 import utilisateur.Groupe;
 import utilisateur.Utilisateur;
@@ -86,14 +87,24 @@ public class Serveur {
 	public void addGroup(Groupe g) {
 		if (!allGroups.contains(g)) {
 			allGroups.add(g);
-			database.addGroupBD(g);
+			try {
+				database.addGroupBD(g);
+			} catch (DataBaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
 	public void addUser(Utilisateur u) {
 		if (!allUsers.contains(u)) {
 			allUsers.add(u);
-			database.addUserBD(u);
+			try {
+				database.addUserBD(u);
+			} catch (DataBaseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 	}
 
