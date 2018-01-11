@@ -12,50 +12,27 @@ import utilisateur.Utilisateur;
 public class GestionMessage {
 	
 	//ATTRIBUTS
-	DB database;
+	DB database = new DB();
 	Tube tube;
 	Serveur server;
 	
 	
 	//CONSTRUCTEUR
-	public GestionMessage(Tube tube)
-	{
-		this.tube=tube;
-	}
-	
+
 	//METHODES
 	
-	//TRAITEMENT MESSAGE CLASSIQUE
-	public void traitementMessage(Message message,FilDeDiscussion fil )
-	{
-		
-		try {
-			this.database.addMessageToFil(fil.getIdFil(),message);
-		} catch (DataBaseException e) {
-			// ENVOYER MESSAGE UTILISATEUR ?????
-			e.printStackTrace();
-		}
-		try {
-			this.tube.broadcast(this.server.getAllSockets(), message);
-		} catch (IOException e) {
-			// ENVOYER MESSAGE UTILISATEUR ?????
-			e.printStackTrace();
-		}
-
-
+	public GestionMessage(Tube tube) {
+		this.tube = tube;
 	}
-	
-	//TRAITEMENT CREATION DE TICKET
 
-	
-	//GESTION LOGIN
-	public Utilisateur checklogin(Message message)
-	{
-		Scanner scanner=new Scanner(message.getMsg()).useDelimiter("#");
-		Utilisateur user;
-		user = this.database.login(scanner.next(), scanner.next());
-		scanner.close();
-		return user;
+	public void filDeDiscussion(FilDeDiscussion fdd) {
+		
+		
+	}
+
+	public void message(Message message) {
+		
+		
 	}
 	
 	

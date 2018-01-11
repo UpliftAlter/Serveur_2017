@@ -6,6 +6,7 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
+import utilisateur.FilDeDiscussion;
 import utilisateur.Message;
 
 public class Tube implements Runnable {
@@ -13,6 +14,7 @@ public class Tube implements Runnable {
 	private Socket socket;
 	private ObjectInputStream inputFromClient;
 	private ObjectOutputStream outputToClient;
+	private GestionMessage gestionMessage = new GestionMessage(this);
 
 	public Tube(Serveur server, Socket s) {
 		this.server = server;
@@ -23,39 +25,46 @@ public class Tube implements Runnable {
 	public void run() {
 		try {
 			while (true) {
-				System.out.println(server.getAllSockets());
-				if (socket.isConnected()) {
-					inputFromClient = new ObjectInputStream(
-							socket.getInputStream());
-					Object temp = inputFromClient.readObject();
-					if (temp != null) {
-						if (temp instanceof Message) {
-							Message message = (Message) temp;
-							broadcast(server.getAllSockets(), message);
-						}
-					}
-				}
+				receive();
 			}
-
 		} catch (IOException e) {
 			System.out.println("Someone has disconnected");
 			server.getAllSockets().remove(socket);
-			System.out.println(server.getAllSockets());
-			
 		} catch (ClassNotFoundException e) {
-			System.out.println("Class non connu");
+			System.out.println("Class not found !");
 		}
-		
+
 	}
 
-	public void broadcast(List<Socket> list, Message tobroad)
-			throws IOException {
-		
-		System.out.println(list);
-		for (Socket stemp : list) {
-			outputToClient = new ObjectOutputStream(stemp.getOutputStream());
-			outputToClient.writeObject(tobroad);
-			outputToClient.flush();
+	public void receive() throws IOException, ClassNotFoundException {
+		if (socket.isConnected()) {
+			inputFromClient = new ObjectInputStream(socket.getInputStream());
+			Object temp = inputFromClient.readObject();
+			if (temp != null) {
+				if (temp instanceof Message) {
+					Message message = (Message) temp;
+					gestionMessage.message(message);
+				} else if (temp instanceof FilDeDiscussion) {
+					FilDeDiscussion fdd = (FilDeDiscussion) temp;
+					gestionMessage.filDeDiscussion(fdd);
+				}
+			}
 		}
+	}
+
+	public void send(Socket client, Message message) {
+		try {
+			outputToClient = new ObjectOutputStream(client.getOutputStream());
+			outputToClient.writeObject(message);
+			outputToClient.flush();
+		} catch (IOException e) {
+			System.out.println("Error sending message from server to client");
+		}
+
+	}
+
+	public void broadcast(List<Socket> list, Message msgtobroad) {
+		for (Socket stemp : list)
+			send(stemp, msgtobroad);
 	}
 }
