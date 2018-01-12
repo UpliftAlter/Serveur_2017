@@ -9,6 +9,10 @@ import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JList;
 
+import classes.Enseignant;
+import classes.Etudiant;
+import classes.Utilisateur;
+
 @SuppressWarnings({ "serial" })
 class RenduUtilisateurCell extends DefaultListCellRenderer {
 	private JLabel label = new JLabel();
@@ -21,11 +25,20 @@ class RenduUtilisateurCell extends DefaultListCellRenderer {
 	private Color textNonSelectionColor = Color.BLACK;
 	private Color backgroundNonSelectionColor = Color.WHITE;
 
-	public Component getListCellRendererComponent(@SuppressWarnings("rawtypes") JList list, Object value,
-			int index, boolean selected, boolean expanded) {
-		Image i = tabIcon[index % 3].getImage().getScaledInstance(30, -1,
-				Image.SCALE_AREA_AVERAGING);
+	public Component getListCellRendererComponent(JList list, Object value, int index, boolean selected,
+			boolean expanded) {
+
 		if (value != null) {
+			Image i = null;
+			Utilisateur u = (Utilisateur) value;
+			if (u instanceof Etudiant) {
+				i = tabIcon[0].getImage().getScaledInstance(30, -1, Image.SCALE_AREA_AVERAGING);
+			} else if (u instanceof Enseignant) {
+				i = tabIcon[1].getImage().getScaledInstance(30, -1, Image.SCALE_AREA_AVERAGING);
+			} else {
+				i = tabIcon[2].getImage().getScaledInstance(30, -1, Image.SCALE_AREA_AVERAGING);
+			}
+
 			label.setOpaque(true);
 			label.setIcon(new ImageIcon(i));
 			label.setText(value.toString());

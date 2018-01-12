@@ -22,15 +22,15 @@ public class PanelGroupe extends JScrollPane {
 	private FrameServeur frameServeur;
 	private JPopupMenu popupMenu = new JPopupMenu();
 	private JMenuItem supprimer = new JMenuItem("Supprimer");
+	private JMenuItem modifier = new JMenuItem("Modifier");
 	private JButton ajouterGroupeButton = new JButton("Ajouter un groupe");
 	private JPanel mainPanel = new JPanel();
 	private JList<Groupe> listeGroupe = new JList<>();
 	private JScrollPane listeGroupeScrollPanel = new JScrollPane();
-	private JTextField rechercheTextField = new JTextField(
-			"Tapez pour rechercher");
+	private JTextField rechercheTextField = new JTextField("Tapez pour rechercher");
 	private DefaultListModel<Groupe> lmRef = new DefaultListModel<>();
-	private Font italic = new Font(rechercheTextField.getFont().getFontName(),
-			Font.ITALIC, rechercheTextField.getFont().getSize());
+	private Font italic = new Font(rechercheTextField.getFont().getFontName(), Font.ITALIC,
+			rechercheTextField.getFont().getSize());
 	private Font original = rechercheTextField.getFont();
 
 	public PanelGroupe(FrameServeur frameServeur) {
@@ -44,20 +44,26 @@ public class PanelGroupe extends JScrollPane {
 		listeGroupe.setCellRenderer(new RenduGroupeCell());
 		listeGroupeScrollPanel.setViewportView(listeGroupe);
 		rechercheTextField.setFont(italic);
+		popupMenu.add(modifier);
 		popupMenu.add(supprimer);
 
 		// Events
+		modifier.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				modifierActionPerformed(evt);
+			}
+		});
+
 		supprimer.addActionListener(new java.awt.event.ActionListener() {
 			public void actionPerformed(java.awt.event.ActionEvent evt) {
 				supprimerActionPerformed(evt);
 			}
 		});
-		ajouterGroupeButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						ajouterGroupeButtonActionPerformed(evt);
-					}
-				});
+		ajouterGroupeButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				ajouterGroupeButtonActionPerformed(evt);
+			}
+		});
 		rechercheTextField.addKeyListener(new java.awt.event.KeyAdapter() {
 			public void keyReleased(java.awt.event.KeyEvent evt) {
 				rechercheTextFieldKeyPressed(evt);
@@ -72,13 +78,11 @@ public class PanelGroupe extends JScrollPane {
 				messageTextFieldMouseExited(evt);
 			}
 		});
-		listeGroupe
-				.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-					public void valueChanged(
-							javax.swing.event.ListSelectionEvent evt) {
-						listeGroupeValueChanged(evt);
-					}
-				});
+		listeGroupe.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+				listeGroupeValueChanged(evt);
+			}
+		});
 		listeGroupe.addMouseListener(new MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				int index = listeGroupe.locationToIndex(evt.getPoint());
@@ -90,61 +94,29 @@ public class PanelGroupe extends JScrollPane {
 			}
 		});
 		// Layout
-		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(
-				mainPanel);
+		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
-		mainPanelLayout
-				.setHorizontalGroup(mainPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								mainPanelLayout
-										.createSequentialGroup()
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.TRAILING)
-														.addComponent(
-																rechercheTextField,
-																javax.swing.GroupLayout.Alignment.LEADING,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																450,
-																Short.MAX_VALUE)
-														.addComponent(
-																listeGroupeScrollPanel,
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addComponent(
-																ajouterGroupeButton,
-																javax.swing.GroupLayout.Alignment.LEADING,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																Short.MAX_VALUE))
-										.addGap(0, 0, 0)));
-		mainPanelLayout
-				.setVerticalGroup(mainPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								mainPanelLayout
-										.createSequentialGroup()
-										.addComponent(
-												rechercheTextField,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												40,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-										.addComponent(
-												listeGroupeScrollPanel,
-												javax.swing.GroupLayout.DEFAULT_SIZE,
-												402, Short.MAX_VALUE)
-										.addGap(16, 16, 16)
-										.addComponent(
-												ajouterGroupeButton,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												38,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addContainerGap()));
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(mainPanelLayout.createSequentialGroup()
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+								.addComponent(rechercheTextField, javax.swing.GroupLayout.Alignment.LEADING,
+										javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+								.addComponent(listeGroupeScrollPanel, javax.swing.GroupLayout.Alignment.LEADING)
+								.addComponent(ajouterGroupeButton, javax.swing.GroupLayout.Alignment.LEADING,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
+										Short.MAX_VALUE))
+						.addGap(0, 0, 0)));
+		mainPanelLayout.setVerticalGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(mainPanelLayout.createSequentialGroup()
+						.addComponent(rechercheTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 40,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+						.addComponent(listeGroupeScrollPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 402,
+								Short.MAX_VALUE)
+						.addGap(16, 16, 16).addComponent(ajouterGroupeButton, javax.swing.GroupLayout.PREFERRED_SIZE,
+								38, javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addContainerGap()));
 
 		this.setViewportView(mainPanel);
 	}
@@ -155,6 +127,19 @@ public class PanelGroupe extends JScrollPane {
 		frameServeur.getServeur().removeGroup(temp);
 		lmRef.removeElement(temp);
 		listeGroupe.repaint();
+	}
+
+	private void modifierActionPerformed(java.awt.event.ActionEvent evt) {
+		String temp = JOptionPane.showInputDialog("Entrez le nouveau nom");
+
+		if (temp != null) {
+			if (!temp.equals("")) {
+				listeGroupe.getSelectedValue().setNomGroupe(temp);
+			} else {
+				JOptionPane.showMessageDialog(frameServeur, "Le nom ne peut etre vide !");
+			}
+		}
+
 	}
 
 	private void rechercheTextFieldKeyPressed(java.awt.event.KeyEvent evt) {
@@ -176,10 +161,8 @@ public class PanelGroupe extends JScrollPane {
 		}
 	}
 
-	private void listeGroupeValueChanged(
-			javax.swing.event.ListSelectionEvent evt) {
-		frameServeur.getPanelUtilisateur().initModel(
-				listeGroupe.getSelectedValue());
+	private void listeGroupeValueChanged(javax.swing.event.ListSelectionEvent evt) {
+		frameServeur.getPanelUtilisateur().initModel(listeGroupe.getSelectedValue());
 		if (listeGroupe.getSelectedValue() != null)
 			if (isFirstGroup()) {
 				frameServeur.getPanelUtilisateur().setAddUsers();
@@ -188,15 +171,13 @@ public class PanelGroupe extends JScrollPane {
 			}
 	}
 
-	public void ajouterGroupeButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
+	public void ajouterGroupeButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		String tempS = JOptionPane.showInputDialog("Nom du groupe: ");
 		if (tempS != null) {
 			if (!tempS.equals("")) {
 				frameServeur.getServeur().addGroup(new Groupe(tempS));
 			} else {
-				JOptionPane.showMessageDialog(frameServeur,
-						"Le nom ne peut etre vide !");
+				JOptionPane.showMessageDialog(frameServeur, "Le nom ne peut etre vide !");
 			}
 			initModel();
 		}
@@ -234,8 +215,7 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	public boolean isFirstGroup() {
-		return listeGroupe.getSelectedValue().getNomGroupe()
-				.equals("Tous les utilisateurs");
+		return listeGroupe.getSelectedValue().getNomGroupe().equals("Tous les utilisateurs");
 	}
 
 	public Groupe getGroupeSelected() {

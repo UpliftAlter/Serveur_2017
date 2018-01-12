@@ -37,6 +37,7 @@ public class Tube implements Runnable {
 	}
 
 	public void receive() throws IOException, ClassNotFoundException {
+		System.out.println("Receive server");
 		if (socket.isConnected()) {
 			inputFromClient = new ObjectInputStream(socket.getInputStream());
 			Object temp = inputFromClient.readObject();
@@ -58,7 +59,7 @@ public class Tube implements Runnable {
 			outputToClient.writeObject(object);
 			outputToClient.flush();
 		} catch (IOException e) {
-			System.out.println("Error sending message from server to client");
+			System.out.println("Error sending message classic to client");
 		}
 
 	}
@@ -69,7 +70,7 @@ public class Tube implements Runnable {
 			outputToClient.writeObject(object);
 			outputToClient.flush();
 		} catch (IOException e) {
-			System.out.println("Error sending message from server to client");
+			System.out.println("Error sending message to client");
 		}
 
 	}

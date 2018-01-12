@@ -8,6 +8,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import com.mysql.jdbc.Util;
+
 import classes.Agent;
 import classes.Enseignant;
 import classes.Etudiant;
@@ -31,6 +33,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	private JLabel statusLabel = new JLabel("Statut:");
 	private JComboBox<String> statusComboBox = new JComboBox<>();
 	private FrameServeur frameServeur;
+	private boolean modifyOrAdd = true;
 
 	public FrameAjouterUtilisateur(FrameServeur frameServeur) {
 		this.frameServeur = frameServeur;
@@ -57,18 +60,16 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 			}
 		});
 
-		autoPasswordButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						autoPasswordButtonActionPerformed(evt);
-					}
-				});
-		autoUsernameButton
-				.addActionListener(new java.awt.event.ActionListener() {
-					public void actionPerformed(java.awt.event.ActionEvent evt) {
-						autoUsernameButtonActionPerformed(evt);
-					}
-				});
+		autoPasswordButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				autoPasswordButtonActionPerformed(evt);
+			}
+		});
+		autoUsernameButton.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				autoUsernameButtonActionPerformed(evt);
+			}
+		});
 
 		addWindowListener(new java.awt.event.WindowAdapter() {
 			@Override
@@ -77,223 +78,100 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 			}
 		});
 		// Layout
-		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(
-				mainPanel);
+		javax.swing.GroupLayout mainPanelLayout = new javax.swing.GroupLayout(mainPanel);
 		mainPanel.setLayout(mainPanelLayout);
-		mainPanelLayout
-				.setHorizontalGroup(mainPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								mainPanelLayout
-										.createSequentialGroup()
-										.addGap(41, 41, 41)
-										.addComponent(
-												creerButton,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												100,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addPreferredGap(
-												javax.swing.LayoutStyle.ComponentPlacement.RELATED,
-												88, Short.MAX_VALUE)
-										.addComponent(
-												annulerButton,
-												javax.swing.GroupLayout.PREFERRED_SIZE,
-												100,
-												javax.swing.GroupLayout.PREFERRED_SIZE)
-										.addGap(49, 49, 49))
-						.addGroup(
-								mainPanelLayout
-										.createSequentialGroup()
-										.addContainerGap()
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.TRAILING)
-														.addComponent(
-																statusLabel)
-														.addGroup(
-																mainPanelLayout
-																		.createParallelGroup(
-																				javax.swing.GroupLayout.Alignment.TRAILING)
-																		.addComponent(
-																				prenomLabel)
-																		.addComponent(
-																				usernameLabel,
-																				javax.swing.GroupLayout.Alignment.LEADING))
-														.addComponent(nomLabel)
-														.addComponent(
-																passwordLabel))
-										.addGap(18, 18, 18)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.LEADING)
-														.addGroup(
-																mainPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				mainPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.TRAILING,
-																								false)
-																						.addComponent(
-																								passwordTextField,
-																								javax.swing.GroupLayout.Alignment.LEADING,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								183,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								usernameTextField,
-																								javax.swing.GroupLayout.Alignment.LEADING)
-																						.addComponent(
-																								prenomTextField,
-																								javax.swing.GroupLayout.Alignment.LEADING))
-																		.addPreferredGap(
-																				javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-																		.addGroup(
-																				mainPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.LEADING)
-																						.addComponent(
-																								autoUsernameButton,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)
-																						.addComponent(
-																								autoPasswordButton,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								javax.swing.GroupLayout.DEFAULT_SIZE,
-																								Short.MAX_VALUE)))
-														.addGroup(
-																mainPanelLayout
-																		.createSequentialGroup()
-																		.addGroup(
-																				mainPanelLayout
-																						.createParallelGroup(
-																								javax.swing.GroupLayout.Alignment.LEADING,
-																								false)
-																						.addComponent(
-																								nomTextField)
-																						.addComponent(
-																								statusComboBox,
-																								0,
-																								185,
-																								Short.MAX_VALUE))
-																		.addGap(0,
-																				0,
-																				Short.MAX_VALUE)))
-										.addContainerGap()));
-		mainPanelLayout
-				.setVerticalGroup(mainPanelLayout
-						.createParallelGroup(
-								javax.swing.GroupLayout.Alignment.LEADING)
-						.addGroup(
-								mainPanelLayout
-										.createSequentialGroup()
-										.addGap(26, 26, 26)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																statusLabel)
-														.addComponent(
-																statusComboBox,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(18, 18, 18)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(nomLabel)
-														.addComponent(
-																nomTextField,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(23, 23, 23)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																prenomLabel)
-														.addComponent(
-																prenomTextField,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE))
-										.addGap(18, 18, 18)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																usernameTextField,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																usernameLabel)
-														.addComponent(
-																autoUsernameButton))
-										.addGap(18, 18, 18)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																passwordLabel)
-														.addComponent(
-																passwordTextField,
-																javax.swing.GroupLayout.PREFERRED_SIZE,
-																javax.swing.GroupLayout.DEFAULT_SIZE,
-																javax.swing.GroupLayout.PREFERRED_SIZE)
-														.addComponent(
-																autoPasswordButton))
-										.addGap(37, 37, 37)
-										.addGroup(
-												mainPanelLayout
-														.createParallelGroup(
-																javax.swing.GroupLayout.Alignment.BASELINE)
-														.addComponent(
-																creerButton)
-														.addComponent(
-																annulerButton))
-										.addContainerGap(37, Short.MAX_VALUE)));
+		mainPanelLayout.setHorizontalGroup(mainPanelLayout
+				.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(mainPanelLayout.createSequentialGroup().addGap(41, 41, 41)
+						.addComponent(creerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 88, Short.MAX_VALUE)
+						.addComponent(annulerButton, javax.swing.GroupLayout.PREFERRED_SIZE, 100,
+								javax.swing.GroupLayout.PREFERRED_SIZE)
+						.addGap(49, 49, 49))
+				.addGroup(mainPanelLayout.createSequentialGroup().addContainerGap().addGroup(mainPanelLayout
+						.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING).addComponent(statusLabel)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+								.addComponent(prenomLabel)
+								.addComponent(usernameLabel, javax.swing.GroupLayout.Alignment.LEADING))
+						.addComponent(nomLabel).addComponent(passwordLabel)).addGap(18, 18, 18)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+								.addGroup(mainPanelLayout.createSequentialGroup().addGroup(mainPanelLayout
+										.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+										.addComponent(passwordTextField, javax.swing.GroupLayout.Alignment.LEADING,
+												javax.swing.GroupLayout.DEFAULT_SIZE, 183, Short.MAX_VALUE)
+										.addComponent(usernameTextField, javax.swing.GroupLayout.Alignment.LEADING)
+										.addComponent(prenomTextField, javax.swing.GroupLayout.Alignment.LEADING))
+										.addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+										.addGroup(mainPanelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+												.addComponent(autoUsernameButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+												.addComponent(autoPasswordButton, javax.swing.GroupLayout.DEFAULT_SIZE,
+														javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+								.addGroup(mainPanelLayout.createSequentialGroup()
+										.addGroup(mainPanelLayout
+												.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+												.addComponent(nomTextField)
+												.addComponent(statusComboBox, 0, 185, Short.MAX_VALUE))
+										.addGap(0, 0, Short.MAX_VALUE)))
+						.addContainerGap()));
+		mainPanelLayout.setVerticalGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+				.addGroup(mainPanelLayout.createSequentialGroup().addGap(26, 26, 26)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(statusLabel)
+								.addComponent(statusComboBox, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(18, 18, 18)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(nomLabel)
+								.addComponent(nomTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(23, 23, 23)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(prenomLabel)
+								.addComponent(prenomTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+						.addGap(18, 18, 18)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(usernameTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(usernameLabel).addComponent(autoUsernameButton))
+						.addGap(18, 18, 18)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(passwordLabel)
+								.addComponent(passwordTextField, javax.swing.GroupLayout.PREFERRED_SIZE,
+										javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+								.addComponent(autoPasswordButton))
+						.addGap(37, 37, 37)
+						.addGroup(mainPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+								.addComponent(creerButton).addComponent(annulerButton))
+						.addContainerGap(37, Short.MAX_VALUE)));
 
-		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(
-				getContentPane());
+		javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
 		getContentPane().setLayout(layout);
-		layout.setHorizontalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-				mainPanel, javax.swing.GroupLayout.DEFAULT_SIZE,
-				javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
-		layout.setVerticalGroup(layout.createParallelGroup(
-				javax.swing.GroupLayout.Alignment.LEADING).addComponent(
-				mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE,
-				javax.swing.GroupLayout.DEFAULT_SIZE,
+		layout.setHorizontalGroup(
+				layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(mainPanel,
+						javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE));
+		layout.setVerticalGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING).addComponent(
+				mainPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE,
 				javax.swing.GroupLayout.PREFERRED_SIZE));
 
 		pack();
 	}
 
-	private void autoUsernameButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
-		if(!isEmptyField(nomTextField) && !isEmptyField(prenomTextField)){
-			String temp = prenomTextField.getText().toLowerCase().trim()+"."+nomTextField.getText().toLowerCase().trim();
+	private void autoUsernameButtonActionPerformed(java.awt.event.ActionEvent evt) {
+		if (!isEmptyField(nomTextField) && !isEmptyField(prenomTextField)) {
+			String temp = prenomTextField.getText().toLowerCase().trim() + "."
+					+ nomTextField.getText().toLowerCase().trim();
 			String temp2 = temp.replaceAll("[-\\s]", "");
 			usernameTextField.setText(temp2);
-		}else {
+		} else {
 			JOptionPane.showMessageDialog(frameServeur, "Remplissez le nom et le prenom");
 		}
 	}
 
-	private void autoPasswordButtonActionPerformed(
-			java.awt.event.ActionEvent evt) {
+	private void autoPasswordButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		passwordTextField.setText(new RandomString(6).nextString());
 	}
 
@@ -302,40 +180,41 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 		if (checkFields()) {
 			switch (getComboBoxValue()) {
 			case ETUDIANT:
-				u = new Etudiant(nomTextField.getText(),
-						prenomTextField.getText(), usernameTextField.getText(),
+				u = new Etudiant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
 						passwordTextField.getText());
 				break;
 			case ENSEIGNANT:
-				u = new Enseignant(nomTextField.getText(),
-						prenomTextField.getText(), usernameTextField.getText(),
+				u = new Enseignant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
 						passwordTextField.getText());
 				break;
 			case ADMINISTRATIF:
-				u = new Agent(nomTextField.getText(),
-						prenomTextField.getText(), usernameTextField.getText(),
-						passwordTextField.getText(),
-						TypeUtilisateur.ADMINISTRATIF);
+				u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
+						passwordTextField.getText(), TypeUtilisateur.ADMINISTRATIF);
 				break;
 			case TECHNIQUE:
-				u = new Agent(nomTextField.getText(),
-						prenomTextField.getText(), usernameTextField.getText(),
+				u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
 						passwordTextField.getText(), TypeUtilisateur.TECHNIQUE);
 				break;
 
 			default:
 				break;
 			}
-
-			frameServeur.getServeur().addUser(u);
-			frameServeur.getPanelGroupe().getGroupeSelected().addMember(u);
-			frameServeur.getPanelUtilisateur().initModel(
-					frameServeur.getPanelGroupe().getGroupeSelected());
+			if (modifyOrAdd) {
+				frameServeur.getServeur().addUser(u);
+				frameServeur.getPanelGroupe().getGroupeSelected().addMember(u);
+				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
+			} else {
+				Utilisateur temp = frameServeur.getPanelUtilisateur().getSelectedUser();
+				temp.setNom(u.getNom());
+				temp.setPrenom(u.getPrenom());
+				temp.setMdp(u.getMdp());
+				temp.setLogin(u.getLogin());
+				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
+			}
 			dispose();
 
 		} else {
-			JOptionPane.showMessageDialog(frameServeur,
-					"Remplissez tous les champs");
+			JOptionPane.showMessageDialog(frameServeur, "Remplissez tous les champs");
 		}
 	}
 
@@ -344,8 +223,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	}
 
 	private boolean checkFields() {
-		return !isEmptyField(nomTextField) && !isEmptyField(passwordTextField)
-				&& !isEmptyField(prenomTextField)
+		return !isEmptyField(nomTextField) && !isEmptyField(passwordTextField) && !isEmptyField(prenomTextField)
 				&& !isEmptyField(usernameTextField);
 	}
 
@@ -355,8 +233,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 
 	private void initComboBox() {
 		DefaultComboBoxModel<String> jcbm = new DefaultComboBoxModel<>(
-				new String[] { "Etudiant", "Enseignant", "Agent administratif",
-						"Agent technique" });
+				new String[] { "Etudiant", "Enseignant", "Agent administratif", "Agent technique" });
 		statusComboBox.setModel(jcbm);
 	}
 
@@ -380,11 +257,15 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 		}
 		return temp;
 	}
-	
-	public void resettextFields(){
+
+	public void resettextFields() {
 		nomTextField.setText("");
 		prenomTextField.setText("");
 		usernameTextField.setText("");
 		passwordTextField.setText("");
+	}
+
+	public void setModifyOrAdd (boolean b) {
+		modifyOrAdd = b;
 	}
 }

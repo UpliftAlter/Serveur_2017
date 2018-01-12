@@ -67,6 +67,11 @@ public class GestionMessage {
 		String[] login = getLogin(message.getMsg());
 		Utilisateur uTemp = database.login(login[0], login[1]);
 		a.send(uTemp);
+		if (a != null) {
+			Thread t = new Thread(new Tube(a.getServeur(), a.getSocket()));
+			System.out.println("Thread cree");
+			t.start();
+		}
 	}
 
 	private void gererInitGroupes() {

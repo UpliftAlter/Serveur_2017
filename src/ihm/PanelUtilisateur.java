@@ -8,6 +8,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import javax.swing.JList;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
@@ -22,7 +23,10 @@ public class PanelUtilisateur extends JScrollPane {
 	@SuppressWarnings("unused")
 	private FrameServeur frameServeur;
 	private JPopupMenu popupMenu = new JPopupMenu();
+	private JPopupMenu popupMenu2 = new JPopupMenu();
 	private JMenuItem supprimer = new JMenuItem("Supprimer");
+	private JMenuItem supprimer2 = new JMenuItem("Supprimer");
+	private JMenuItem modifier = new JMenuItem("Modifier");
 	private JButton ajouterMembreButton = new JButton(
 			"Creer un nouveau utilisateur");
 	private JPanel mainPanel = new JPanel();
@@ -52,10 +56,22 @@ public class PanelUtilisateur extends JScrollPane {
 		listeUtilisateur.setCellRenderer(new RenduUtilisateurCell());
 		listeUtilisateurScrollPanel.setViewportView(listeUtilisateur);
 		rechercheTextField.setFont(italic);
+		popupMenu.add(modifier);
 		popupMenu.add(supprimer);
+		popupMenu2.add(supprimer2);
 
 		// Events
+		modifier.addActionListener(new java.awt.event.ActionListener() {
+			public void actionPerformed(java.awt.event.ActionEvent evt) {
+				modifierActionPerformed(evt);
+			}
+		});
 		supprimer.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                supprimerActionPerformed(evt);
+            }
+        });
+		supprimer2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 supprimerActionPerformed(evt);
             }
@@ -85,7 +101,11 @@ public class PanelUtilisateur extends JScrollPane {
 				int index = listeUtilisateur.locationToIndex(evt.getPoint());
 				listeUtilisateur.setSelectedIndex(index);
 				if(SwingUtilities.isRightMouseButton(evt) && listeUtilisateur.getSelectedValue() != null)
-					doPop(evt);
+					if (frameServeur.getPanelGroupe().isFirstGroup()) {
+						doPop(evt);
+					} else {
+						doPop2(evt);
+					}
 			}
 		});
 
@@ -191,10 +211,17 @@ public class PanelUtilisateur extends JScrollPane {
 			panelAjouterMembre.getCbl().initModel(frameServeur.getAllUsers());
 		}
 	}
-
+	private void modifierActionPerformed(java.awt.event.ActionEvent evt) {
+		panelAjouterUtilisateur.setModifyOrAdd(false);
+		panelAjouterUtilisateur.setVisible(true);
+		
+	}
 	// Other
-    public void doPop (MouseEvent e){
+	public void doPop (MouseEvent e){
         popupMenu.show(e.getComponent(), e.getX(), e.getY());
+    }
+	public void doPop2 (MouseEvent e){
+        popupMenu2.show(e.getComponent(), e.getX(), e.getY());
     }
     
 	private void recherche() {
@@ -242,4 +269,7 @@ public class PanelUtilisateur extends JScrollPane {
 		this.addMemberOrAddUser = addMemberOrAddUser;
 	}
 
+	public Utilisateur getSelectedUser() {
+		return listeUtilisateur.getSelectedValue();
+	}
 }

@@ -13,12 +13,12 @@ public class Authentification implements Runnable {
 	private Serveur serveur;
 	private ObjectInputStream inputFromServer;
 	private ObjectOutputStream outputToServer;
-	private DB database = new DB();
-	private GestionMessage gm = new GestionMessage(this);
+	private GestionMessage gm;
 
 	public Authentification(Serveur serveur, Socket socket) {
 		this.serveur = serveur;
 		this.socket = socket;
+		gm = new GestionMessage(this);
 		
 	}
 
@@ -57,5 +57,15 @@ public class Authentification implements Runnable {
 			e.printStackTrace();
 		}
 	}
+
+	public Socket getSocket() {
+		return socket;
+	}
+
+	public Serveur getServeur() {
+		return serveur;
+	}
+	
+	
 
 }

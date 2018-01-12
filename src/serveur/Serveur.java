@@ -39,7 +39,7 @@ public class Serveur {
 			Socket enteringClient = server.accept();
 			System.out.println("Someone has connected");
 			allSockets.add(enteringClient);
-
+			System.out.println(allSockets);
 			// add user in list
 
 			Thread t = new Thread(new Authentification(this, enteringClient));
