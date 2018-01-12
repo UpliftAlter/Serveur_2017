@@ -24,7 +24,7 @@ public class GestionMessage {
 	public GestionMessage(Tube tube) {
 		this.tube = tube;
 	}
-
+	
 	public GestionMessage(Authentification a) {
 		this.a = a;
 	}
@@ -75,25 +75,14 @@ public class GestionMessage {
 	}
 
 	private void gererInitGroupes() {
-		List<Groupe> lgTemp = null;
-		try {
-			lgTemp = database.getAllGroupsBD();
-		} catch (DataBaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<Groupe> lgTemp = database.getAllGroupsBD();
 		tube.send(lgTemp);
 	}
 
 	private void gererInitFDD(Message message) {
 		int idUser = getIdUserFromMessage(message);
 		if (idUser >= 0) {
-			List<FilDeDiscussion> lfddTemp = null;
-			try {
-				lfddTemp = database.filsFromIdUser(idUser);
-			} catch (DataBaseException e) {
-				e.printStackTrace();
-			}
+			List<FilDeDiscussion> lfddTemp = database.filsFromIdUser(idUser);
 			tube.send(lfddTemp);
 		} else {
 			System.out.println("Erreur init fil de discussions");

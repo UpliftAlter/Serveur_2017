@@ -4,16 +4,10 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import classes.DB;
 import classes.DataBaseException;
 import classes.Groupe;
-import classes.Message;
-import classes.Pair;
-import classes.TypeMessage;
 import classes.Utilisateur;
 import ihm.FrameServeur;
 
@@ -24,14 +18,9 @@ public class Serveur {
 	private ArrayList<Utilisateur> allUsers = new ArrayList<>();
 	private DB database = new DB();
 
-	private Map<Integer, List<Message>> pendingMessages = new HashMap<Integer, List<Message>>();
-	private Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages = new HashMap<Integer, List<Pair<Utilisateur, TypeMessage>>>();
-
 	// Network part
 	private ArrayList<Socket> allSockets = new ArrayList<>();
 	private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
-
-	// private Map<Integer, Socket> onlineusers = new HashMap<Integer, Socket>();
 
 	// CONSTRUCTEUR
 	public Serveur() throws IOException {
@@ -124,11 +113,7 @@ public class Serveur {
 
 	public void removeUserFromGroup(Groupe g, Utilisateur u) {
 		g.deleteMember(u);
-		try {
-			database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
-		} catch (DataBaseException e) {
-			e.printStackTrace();
-		}
+		database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
 	}
 
 	public void removeGroup(Groupe g) {
@@ -142,27 +127,15 @@ public class Serveur {
 	}
 
 	private void initAllGroups() {
-		try {
-			allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();
-		} catch (DataBaseException e) {
-			e.printStackTrace();
-		}
+		allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();
 
 		for (Groupe groupe : allGroups) {
-			try {
-				groupe.initMembers(database.getUsersFromGroup(groupe.getIdGroupe()));
-			} catch (DataBaseException e) {
-				e.printStackTrace();
-			}
+			groupe.initMembers(database.getUsersFromGroup(groupe.getIdGroupe()));
 		}
 	}
 
 	private void initAllUsers() {
-		try {
-			allUsers = (ArrayList<Utilisateur>) database.getAllUsers();
-		} catch (DataBaseException e) {
-			e.printStackTrace();
-		}
+		allUsers = (ArrayList<Utilisateur>) database.getAllUsers();
 	}
 
 }
