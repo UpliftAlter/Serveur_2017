@@ -15,9 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.SwingUtilities;
 
-import utilisateur.Etudiant;
-import utilisateur.Groupe;
-import utilisateur.Utilisateur;
+import classes.Groupe;
 
 @SuppressWarnings("serial")
 public class PanelGroupe extends JScrollPane {

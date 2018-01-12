@@ -12,7 +12,7 @@ import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 
-import utilisateur.Utilisateur;
+import classes.Utilisateur;
 
 @SuppressWarnings("serial")
 public class CheckBoxList extends JList<JCheckBox> {

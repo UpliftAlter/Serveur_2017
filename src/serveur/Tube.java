@@ -6,8 +6,8 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
 
-import utilisateur.FilDeDiscussion;
-import utilisateur.Message;
+import classes.FilDeDiscussion;
+import classes.Message;
 
 public class Tube implements Runnable {
 	private Serveur server;

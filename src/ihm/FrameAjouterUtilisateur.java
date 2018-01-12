@@ -8,11 +8,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import utilisateur.Agent;
-import utilisateur.Enseignant;
-import utilisateur.Etudiant;
-import utilisateur.TypeUtilisateur;
-import utilisateur.Utilisateur;
+import classes.Agent;
+import classes.Enseignant;
+import classes.Etudiant;
+import classes.TypeUtilisateur;
+import classes.Utilisateur;
 
 public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	private JButton annulerButton = new JButton("Annuler");

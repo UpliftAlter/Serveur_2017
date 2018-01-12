@@ -2,18 +2,19 @@ package serveur;
 
 import java.util.List;
 
-import utilisateur.DB;
-import utilisateur.DataBaseException;
-import utilisateur.FilDeDiscussion;
-import utilisateur.Groupe;
-import utilisateur.Message;
-import utilisateur.Utilisateur;
+import classes.DB;
+import classes.DataBaseException;
+import classes.FilDeDiscussion;
+import classes.Groupe;
+import classes.Message;
+import classes.Utilisateur;
 
 public class GestionMessage {
 
 	// ATTRIBUTS
 	DB database = new DB();
 	Tube tube;
+	Authentification a;
 	Serveur server;
 
 	// CONSTRUCTEUR
@@ -22,6 +23,10 @@ public class GestionMessage {
 
 	public GestionMessage(Tube tube) {
 		this.tube = tube;
+	}
+	
+	public GestionMessage(Authentification a) {
+		this.a = a;
 	}
 
 	public void filDeDiscussion(FilDeDiscussion fdd) {
@@ -61,7 +66,7 @@ public class GestionMessage {
 	private void gererLogin(Message message) {
 		String[] login = getLogin(message.getMsg());
 		Utilisateur uTemp = database.login(login[0], login[1]);
-		tube.send(uTemp);
+		a.send(uTemp);
 	}
 
 	private void gererInitGroupes() {

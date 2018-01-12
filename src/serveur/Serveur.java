@@ -1,22 +1,15 @@
 package serveur;
 
-import ihm.FrameServeur;
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 
-import utilisateur.DB;
-import utilisateur.DataBaseException;
-import utilisateur.Etudiant;
-import utilisateur.Groupe;
-import utilisateur.Utilisateur;
+import classes.DB;
+import classes.DataBaseException;
+import classes.Groupe;
+import classes.Utilisateur;
+import ihm.FrameServeur;
 
 public class Serveur {
 	private int port = 7777;
@@ -49,7 +42,7 @@ public class Serveur {
 
 			// add user in list
 
-			Thread t = new Thread(new Tube(this, enteringClient));
+			Thread t = new Thread(new Authentification(this, enteringClient));
 			t.start();
 		}
 	}

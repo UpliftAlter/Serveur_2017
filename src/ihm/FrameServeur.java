@@ -1,8 +1,6 @@
 package ihm;
 
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -10,12 +8,11 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
-import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 
+import classes.Groupe;
+import classes.Utilisateur;
 import serveur.Serveur;
-import utilisateur.Groupe;
-import utilisateur.Utilisateur;
 
 @SuppressWarnings("serial")
 public class FrameServeur extends JFrame {
