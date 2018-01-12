@@ -124,7 +124,11 @@ public class Serveur {
 
 	public void removeUserFromGroup(Groupe g, Utilisateur u) {
 		g.deleteMember(u);
-		database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
+		try {
+			database.removeUserInGroup(u.getIdUser(), g.getIdGroupe());
+		} catch (DataBaseException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void removeGroup(Groupe g) {
@@ -138,15 +142,27 @@ public class Serveur {
 	}
 
 	private void initAllGroups() {
-		allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();
+		try {
+			allGroups = (ArrayList<Groupe>) database.getAllGroupsBD();
+		} catch (DataBaseException e) {
+			e.printStackTrace();
+		}
 
 		for (Groupe groupe : allGroups) {
-			groupe.initMembers(database.getUsersFromGroup(groupe.getIdGroupe()));
+			try {
+				groupe.initMembers(database.getUsersFromGroup(groupe.getIdGroupe()));
+			} catch (DataBaseException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
 	private void initAllUsers() {
-		allUsers = (ArrayList<Utilisateur>) database.getAllUsers();
+		try {
+			allUsers = (ArrayList<Utilisateur>) database.getAllUsers();
+		} catch (DataBaseException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
