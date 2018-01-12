@@ -7,24 +7,32 @@ import java.net.Socket;
 
 import classes.DB;
 import classes.Message;
+import classes.Utilisateur;
 
 public class Authentification implements Runnable {
 	private Socket socket;
 	private Serveur serveur;
 	private ObjectInputStream inputFromServer;
 	private ObjectOutputStream outputToServer;
-	private GestionMessage gm;
+	private DB database = new DB();
+	private boolean notlogged = true;
 
 	public Authentification(Serveur serveur, Socket socket) {
 		this.serveur = serveur;
-		this.socket = socket;
-		gm = new GestionMessage(this);
-		
+		this.socket = socket;	
 	}
 
 	@Override
 	public void run() {
+		try {
+		while (notlogged)
 		receive();
+		} catch (IOException e) {
+			System.out.println("Someone has disconnected wrong authen");
+			serveur.getAllSockets().remove(socket);
+		} catch (ClassNotFoundException e) {
+			System.out.println("Class not found authentification");
+		}
 	}
 
 	public void send(Object object) {
@@ -37,9 +45,8 @@ public class Authentification implements Runnable {
 		}
 	}
 
-	@SuppressWarnings("unused")
-	public void receive() {
-		try {
+	public void receive() throws ClassNotFoundException, IOException {
+	
 			inputFromServer = new ObjectInputStream(socket.getInputStream());
 			Object temp = null;
 			temp = inputFromServer.readObject();
@@ -47,17 +54,31 @@ public class Authentification implements Runnable {
 			if (temp != null) {
 				if (temp instanceof Message) {
 					Message message = (Message) temp;
-					gm.message(message);
+					gererLogin(message);
 				}
 			}
-		} catch (IOException e) {
-			System.out.println("Erreur reception login");
-		} catch (ClassNotFoundException e) {
-			System.err.println("Erreur de classe dans authentification");
-			e.printStackTrace();
+
+	}
+	
+	private void gererLogin(Message message) {
+		String[] login = getLogin(message.getMsg());
+		Utilisateur uTemp = database.login(login[0], login[1]);
+		if (uTemp == null)
+			System.out.println("hey");
+		send(uTemp);
+		if (uTemp != null) {
+			notlogged = false;
+			Thread t = new Thread(new Tube(serveur, socket));
+			System.out.println("Thread cree");
+			t.start();
 		}
 	}
-
+	
+	private String[] getLogin(String s) {
+		String[] toReturn = s.split("#");
+		return toReturn;
+	}
+	
 	public Socket getSocket() {
 		return socket;
 	}

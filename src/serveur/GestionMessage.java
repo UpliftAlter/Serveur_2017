@@ -1,5 +1,6 @@
 package serveur;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import classes.DB;
@@ -47,9 +48,6 @@ public class GestionMessage {
 		case REQUETE_INIT_GROUP:
 			gererInitGroupes();
 			break;
-		case REQUETE_LOGIN:
-			gererLogin(message);
-			break;
 		case MESSAGE:
 			gererMessage(message);
 			break;
@@ -63,24 +61,13 @@ public class GestionMessage {
 
 	}
 
-	private void gererLogin(Message message) {
-		String[] login = getLogin(message.getMsg());
-		Utilisateur uTemp = database.login(login[0], login[1]);
-		a.send(uTemp);
-		if (a != null) {
-			Thread t = new Thread(new Tube(a.getServeur(), a.getSocket()));
-			System.out.println("Thread cree");
-			t.start();
-		}
-	}
 
 	private void gererInitGroupes() {
-		List<Groupe> lgTemp = null;
+		ArrayList<Groupe> lgTemp = null;
 		try {
-			lgTemp = database.getAllGroupsBD();
+			lgTemp = (ArrayList<Groupe>) database.getAllGroupsBD();
 		} catch (DataBaseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("Catch groups data");
 		}
 		tube.send(lgTemp);
 	}
@@ -92,7 +79,7 @@ public class GestionMessage {
 			try {
 				lfddTemp = database.filsFromIdUser(idUser);
 			} catch (DataBaseException e) {
-				e.printStackTrace();
+				System.out.println("erreur fdd data");
 			}
 			tube.send(lfddTemp);
 		} else {
