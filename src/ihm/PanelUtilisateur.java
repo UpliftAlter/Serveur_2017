@@ -206,6 +206,7 @@ public class PanelUtilisateur extends JScrollPane {
 		if (!addMemberOrAddUser) {
 			panelAjouterUtilisateur.setVisible(true);
 			panelAjouterUtilisateur.resettextFields();
+			panelAjouterUtilisateur.setModifyOrAdd(true);
 		} else {
 			panelAjouterMembre.setVisible(true);
 			panelAjouterMembre.getCbl().initModel(frameServeur.getAllUsers());
@@ -213,6 +214,7 @@ public class PanelUtilisateur extends JScrollPane {
 	}
 	private void modifierActionPerformed(java.awt.event.ActionEvent evt) {
 		panelAjouterUtilisateur.setModifyOrAdd(false);
+		panelAjouterUtilisateur.resettextFields();
 		panelAjouterUtilisateur.setVisible(true);
 		
 	}

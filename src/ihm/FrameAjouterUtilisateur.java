@@ -8,8 +8,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import com.mysql.jdbc.Util;
-
 import classes.Agent;
 import classes.Enseignant;
 import classes.Etudiant;
@@ -178,6 +176,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	private void creerButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		Utilisateur u = null;
 		if (checkFields()) {
+			if (modifyOrAdd) {
 			switch (getComboBoxValue()) {
 			case ETUDIANT:
 				u = new Etudiant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
@@ -199,16 +198,16 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 			default:
 				break;
 			}
-			if (modifyOrAdd) {
+			
 				frameServeur.getServeur().addUser(u);
 				frameServeur.getPanelGroupe().getGroupeSelected().addMember(u);
 				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
 			} else {
 				Utilisateur temp = frameServeur.getPanelUtilisateur().getSelectedUser();
-				temp.setNom(u.getNom());
-				temp.setPrenom(u.getPrenom());
-				temp.setMdp(u.getMdp());
-				temp.setLogin(u.getLogin());
+				temp.setNom(nomTextField.getText());
+				temp.setPrenom(prenomTextField.getText());
+				temp.setMdp(passwordTextField.getText());
+				temp.setLogin(usernameTextField.getText());
 				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
 			}
 			dispose();
@@ -267,5 +266,6 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 
 	public void setModifyOrAdd (boolean b) {
 		modifyOrAdd = b;
+		statusComboBox.setEnabled(b);
 	}
 }
