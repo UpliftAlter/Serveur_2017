@@ -1,6 +1,8 @@
 package serveur;
 
+import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import classes.DB;
@@ -22,12 +24,9 @@ public class GestionMessage {
 
 	// METHODES
 
-	public GestionMessage(Tube tube) {
+	public GestionMessage(Serveur server, Tube tube) {
 		this.tube = tube;
-	}
-
-	public GestionMessage(Authentification a) {
-		this.a = a;
+		this.server = server;
 	}
 
 	public void filDeDiscussion(FilDeDiscussion fdd) {
@@ -57,10 +56,33 @@ public class GestionMessage {
 	}
 
 	private void gererMessage(Message message) {
-		tube.broadcast(null, message);
+		FilDeDiscussion fdd;
+		List<Utilisateur> listUsersInGroup = null;
+		List<Socket> listeSocket = new ArrayList<>();
+		try {
+			fdd = database.loadFil(message.getIdFil());
+			listUsersInGroup = database.getUsersFromGroup(fdd.getGroupe().getIdGroupe());
+		} catch (DataBaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
+			for (Utilisateur user : listUsersInGroup) {
+				Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+				if (socketTemp != null) {
+					listeSocket.add(socketTemp);
+				} else {
+					//add in pending
+				}
+			}
+		}
+		/*Utilisateur user = database.UtilisateurFromID(message.getAuteur().getIdUser());
+		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+		if (socketTemp != null) {
+			listeSocket.add(socketTemp);*/
 
+		tube.broadcast(listeSocket, message);
 	}
-
 
 	private void gererInitGroupes() {
 		ArrayList<Groupe> lgTemp = null;

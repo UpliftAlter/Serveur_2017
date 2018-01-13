@@ -28,8 +28,8 @@ public class Serveur {
 	private Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages = new HashMap<Integer, List<Pair<Utilisateur, TypeMessage>>>();
 
 	// Network part
-	//private ArrayList<Socket> allSockets = new ArrayList<>();
-	//private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
+	// private ArrayList<Socket> allSockets = new ArrayList<>();
+	// private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
 
 	private Map<Integer, Socket> onlineUsers = new HashMap<Integer, Socket>();
 
@@ -49,8 +49,8 @@ public class Serveur {
 		while (true) {
 			Socket enteringClient = server.accept();
 			System.out.println("Someone has connected");
-			//allSockets.add(enteringClient);
-			//System.out.println(allSockets);
+			// allSockets.add(enteringClient);
+			// System.out.println(allSockets);
 			// add user in list
 
 			Thread t = new Thread(new Authentification(this, enteringClient));
@@ -75,12 +75,16 @@ public class Serveur {
 	public ServerSocket getSocket() {
 		return server;
 	}
-	
-	public void addUserSocket (Utilisateur user, Socket sock) {
+
+	public Map<Integer, Socket> getOnlineUsers() {
+		return onlineUsers;
+	}
+
+	public void addUserSocket(Utilisateur user, Socket sock) {
 		onlineUsers.put(user.getIdUser(), sock);
 		System.out.println(onlineUsers);
 	}
-	
+
 	public void deleteUserSocket(int idUser) {
 		onlineUsers.remove(idUser);
 		System.out.println(onlineUsers);

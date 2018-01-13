@@ -14,12 +14,13 @@ public class Tube implements Runnable {
 	private Socket socket;
 	private ObjectInputStream inputFromClient;
 	private ObjectOutputStream outputToClient;
-	private GestionMessage gestionMessage = new GestionMessage(this);
+	private GestionMessage gestionMessage;
 	private int idUser;
 	
 	public Tube(Serveur server, Socket s, int idUser) {
 		this.server = server;
 		this.socket = s;
+		gestionMessage = new GestionMessage(server, this);
 	}
 
 	@Override
