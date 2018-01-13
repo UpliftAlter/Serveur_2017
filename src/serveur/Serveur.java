@@ -75,9 +75,21 @@ public class Serveur {
 	public ServerSocket getSocket() {
 		return server;
 	}
-
+//----------------------------------------------------------------------------------------
 	public Map<Integer, Socket> getOnlineUsers() {
 		return onlineUsers;
+	}
+
+	public Map<Integer, List<Pair<Utilisateur, TypeMessage>>> getEtatRecepetionMessages() {
+		return etatRecepetionMessages;
+	}
+
+	public void setEtatRecepetionMessages(Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages) {
+		this.etatRecepetionMessages = etatRecepetionMessages;
+	}
+
+	public Map<Integer, List<Message>> getPendingMessages() {
+		return pendingMessages;
 	}
 
 	public void addUserSocket(Utilisateur user, Socket sock) {
@@ -85,11 +97,20 @@ public class Serveur {
 		System.out.println(onlineUsers);
 	}
 
-	public void deleteUserSocket(int idUser) {
+	public void removeUserSocket(int idUser) {
 		onlineUsers.remove(idUser);
 		System.out.println(onlineUsers);
 	}
 
+	public void addPendingMessage (int idUser, Message message) {
+		pendingMessages.put(idUser, new ArrayList<>());
+		pendingMessages.get(idUser).add(message);
+	}
+	
+	public void removePendingMessage (int idUser) {
+		pendingMessages.remove(idUser);
+	}
+//-----------------------------------------------------------------------------------------	
 	public void disconnect() throws IOException {
 		server.close();
 	}

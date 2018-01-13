@@ -61,18 +61,19 @@ public class GestionMessage {
 		List<Socket> listeSocket = new ArrayList<>();
 		try {
 			fdd = database.loadFil(message.getIdFil());
-			listUsersInGroup = database.getUsersFromGroup(fdd.getGroupe().getIdGroupe());
+			listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
 		} catch (DataBaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
 			for (Utilisateur user : listUsersInGroup) {
 				Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
 				if (socketTemp != null) {
 					listeSocket.add(socketTemp);
 				} else {
-					//add in pending
+					server.addPendingMessage(user.getIdUser(), message);
 				}
 			}
 		}

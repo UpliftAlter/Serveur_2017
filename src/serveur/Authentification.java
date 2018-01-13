@@ -1,10 +1,11 @@
 package serveur;
 
-import java.awt.Frame;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.List;
+import java.util.Set;
 
 import classes.DB;
 import classes.Message;
@@ -70,8 +71,20 @@ public class Authentification implements Runnable {
 			notlogged = false;
 			Thread t = new Thread(new Tube(serveur, socket, uTemp.getIdUser()));
 			serveur.addUserSocket(uTemp, socket);
+			sendingPendingMessages(uTemp);
 			t.start();
 		}
+	}
+
+	private void sendingPendingMessages(Utilisateur user) {
+		Set<Integer> idUsersCollection = serveur.getPendingMessages().keySet();
+		if(idUsersCollection.contains(user.getIdUser())) {
+			List<Message> listPendingMessages = serveur.getPendingMessages().get(user.getIdUser());
+			for (Message pendingMessage : listPendingMessages) {
+				send(pendingMessage);
+			}
+		}
+
 	}
 
 	private String[] getLogin(String s) {

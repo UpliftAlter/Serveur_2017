@@ -31,7 +31,7 @@ public class Tube implements Runnable {
 			}
 		} catch (IOException e) {
 			System.out.println("Someone has disconnected");
-			server.deleteUserSocket(idUser);
+			server.removeUserSocket(idUser);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found !");
 		}

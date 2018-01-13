@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.SwingUtilities;
 
 import classes.Groupe;
@@ -133,10 +134,10 @@ public class PanelGroupe extends JScrollPane {
 		String temp = JOptionPane.showInputDialog("Entrez le nouveau nom");
 
 		if (temp != null) {
-			if (!temp.equals("")) {
+			if (!temp.equals("") && !alreadyExist(temp)) {
 				listeGroupe.getSelectedValue().setNomGroupe(temp);
 			} else {
-				JOptionPane.showMessageDialog(frameServeur, "Le nom ne peut etre vide !");
+				JOptionPane.showMessageDialog(frameServeur, "Le nom est vide ou existe déjà !");
 			}
 		}
 
@@ -174,10 +175,10 @@ public class PanelGroupe extends JScrollPane {
 	public void ajouterGroupeButtonActionPerformed(java.awt.event.ActionEvent evt) {
 		String tempS = JOptionPane.showInputDialog("Nom du groupe: ");
 		if (tempS != null) {
-			if (!tempS.equals("")) {
+			if (!tempS.equals("") && !alreadyExist(tempS)) {
 				frameServeur.getServeur().addGroup(new Groupe(tempS));
 			} else {
-				JOptionPane.showMessageDialog(frameServeur, "Le nom ne peut etre vide !");
+				JOptionPane.showMessageDialog(frameServeur, "Le nom est vide ou existe déjà !");
 			}
 			initModel();
 		}
@@ -185,6 +186,19 @@ public class PanelGroupe extends JScrollPane {
 	}
 
 	// Other
+	private boolean alreadyExist(String name) {
+		boolean toReturn = false;
+		for (int i = 0; i < lmRef.getSize(); i++) {
+			Groupe g = lmRef.getElementAt(i);
+			if (g.getNomGroupe().equals(name)) {
+				toReturn = true;
+				break;
+			}
+
+		}
+		return toReturn;
+	}
+
 	public void doPop(MouseEvent e) {
 		popupMenu.show(e.getComponent(), e.getX(), e.getY());
 	}
@@ -201,8 +215,6 @@ public class PanelGroupe extends JScrollPane {
 		listeGroupe.setModel(newModel);
 		listeGroupe.repaint();
 	}
-
-	@SuppressWarnings("unused")
 
 	public void initModel() {
 		DefaultListModel<Groupe> temp = new DefaultListModel<Groupe>();
