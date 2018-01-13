@@ -28,7 +28,7 @@ public class Tube implements Runnable {
 	@Override
 	public void run() {
 		try {
-			sendingPendingMessages();
+			
 			while (true) {
 				receive();
 			}
