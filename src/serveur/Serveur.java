@@ -31,7 +31,7 @@ public class Serveur {
 	private ArrayList<Socket> allSockets = new ArrayList<>();
 	private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
 
-	// private Map<Integer, Socket> onlineusers = new HashMap<Integer, Socket>();
+	//private Map<Integer, Socket> onlineUsers = new HashMap<Integer, Socket>();
 
 	// CONSTRUCTEUR
 	public Serveur() throws IOException {
