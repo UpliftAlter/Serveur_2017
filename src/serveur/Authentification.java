@@ -1,5 +1,6 @@
 package serveur;
 
+import java.awt.Frame;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -19,17 +20,16 @@ public class Authentification implements Runnable {
 
 	public Authentification(Serveur serveur, Socket socket) {
 		this.serveur = serveur;
-		this.socket = socket;	
+		this.socket = socket;
 	}
 
 	@Override
 	public void run() {
 		try {
-		while (notlogged)
-		receive();
+			while (notlogged)
+				receive();
 		} catch (IOException e) {
 			System.out.println("Someone has disconnected wrong authen");
-			serveur.getAllSockets().remove(socket);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found authentification");
 		}
@@ -46,20 +46,20 @@ public class Authentification implements Runnable {
 	}
 
 	public void receive() throws ClassNotFoundException, IOException {
-	
-			inputFromServer = new ObjectInputStream(socket.getInputStream());
-			Object temp = null;
-			temp = inputFromServer.readObject();
 
-			if (temp != null) {
-				if (temp instanceof Message) {
-					Message message = (Message) temp;
-					gererLogin(message);
-				}
+		inputFromServer = new ObjectInputStream(socket.getInputStream());
+		Object temp = null;
+		temp = inputFromServer.readObject();
+
+		if (temp != null) {
+			if (temp instanceof Message) {
+				Message message = (Message) temp;
+				gererLogin(message);
 			}
+		}
 
 	}
-	
+
 	private void gererLogin(Message message) {
 		String[] login = getLogin(message.getMsg());
 		Utilisateur uTemp = database.login(login[0], login[1]);
@@ -68,17 +68,17 @@ public class Authentification implements Runnable {
 		send(uTemp);
 		if (uTemp != null) {
 			notlogged = false;
-			Thread t = new Thread(new Tube(serveur, socket));
-			System.out.println("Thread cree");
+			Thread t = new Thread(new Tube(serveur, socket, uTemp.getIdUser()));
+			serveur.addUserSocket(uTemp, socket);
 			t.start();
 		}
 	}
-	
+
 	private String[] getLogin(String s) {
 		String[] toReturn = s.split("#");
 		return toReturn;
 	}
-	
+
 	public Socket getSocket() {
 		return socket;
 	}
@@ -86,7 +86,5 @@ public class Authentification implements Runnable {
 	public Serveur getServeur() {
 		return serveur;
 	}
-	
-	
 
 }

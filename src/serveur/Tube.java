@@ -15,8 +15,9 @@ public class Tube implements Runnable {
 	private ObjectInputStream inputFromClient;
 	private ObjectOutputStream outputToClient;
 	private GestionMessage gestionMessage = new GestionMessage(this);
-
-	public Tube(Serveur server, Socket s) {
+	private int idUser;
+	
+	public Tube(Serveur server, Socket s, int idUser) {
 		this.server = server;
 		this.socket = s;
 	}
@@ -29,7 +30,7 @@ public class Tube implements Runnable {
 			}
 		} catch (IOException e) {
 			System.out.println("Someone has disconnected");
-			server.getAllSockets().remove(socket);
+			server.deleteUserSocket(idUser);
 		} catch (ClassNotFoundException e) {
 			System.out.println("Class not found !");
 		}
