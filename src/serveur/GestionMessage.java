@@ -30,13 +30,30 @@ public class GestionMessage {
 	}
 
 	public void filDeDiscussion(FilDeDiscussion fdd) {
+		List<Utilisateur> listUsersInGroup = null;
+		List<Socket> listeSocket = new ArrayList<>();
 		try {
 			database.addFilDeDiscussion(fdd);
+			database.addMessageToFil(fdd.getIdFil(), fdd.getConversation().get(0));
+			
 		} catch (DataBaseException e) {
-			System.out.println("Erreur ajout fdd dans gerer message coté serveur");
-			e.printStackTrace();
+			System.out.println("Erreur ajout fdd dans gerer message cote serveur");
 		}
-		tube.broadcast(null, fdd.getConversation().get(0));
+		listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
+		
+		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
+			for (Utilisateur user : listUsersInGroup) {
+				Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+				if (socketTemp != null) {
+					listeSocket.add(socketTemp);
+				} 
+			}
+		}
+		Utilisateur user = database.UtilisateurFromID(fdd.getCreateur().getIdUser());
+		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+		if (socketTemp != null && !listeSocket.contains(socketTemp)) 
+			listeSocket.add(socketTemp);
+		tube.broadcast(listeSocket, fdd.getConversation().get(0));
 	}
 
 	public void message(Message message) {
@@ -63,7 +80,6 @@ public class GestionMessage {
 			fdd = database.loadFil(message.getIdFil());
 			listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
 		} catch (DataBaseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
