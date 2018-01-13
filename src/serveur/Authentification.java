@@ -71,21 +71,11 @@ public class Authentification implements Runnable {
 			notlogged = false;
 			Thread t = new Thread(new Tube(serveur, socket, uTemp.getIdUser()));
 			serveur.addUserSocket(uTemp, socket);
-			sendingPendingMessages(uTemp);
 			t.start();
 		}
 	}
 
-	private void sendingPendingMessages(Utilisateur user) {
-		Set<Integer> idUsersCollection = serveur.getPendingMessages().keySet();
-		if(idUsersCollection.contains(user.getIdUser())) {
-			List<Message> listPendingMessages = serveur.getPendingMessages().get(user.getIdUser());
-			for (Message pendingMessage : listPendingMessages) {
-				send(pendingMessage);
-			}
-		}
 
-	}
 
 	private String[] getLogin(String s) {
 		String[] toReturn = s.split("#");

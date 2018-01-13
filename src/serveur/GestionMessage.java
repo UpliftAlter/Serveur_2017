@@ -77,10 +77,10 @@ public class GestionMessage {
 				}
 			}
 		}
-		/*Utilisateur user = database.UtilisateurFromID(message.getAuteur().getIdUser());
+		Utilisateur user = database.UtilisateurFromID(message.getAuteur().getIdUser());
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
-		if (socketTemp != null) {
-			listeSocket.add(socketTemp);*/
+		if (socketTemp != null && !listeSocket.contains(socketTemp)) 
+			listeSocket.add(socketTemp);
 
 		tube.broadcast(listeSocket, message);
 	}

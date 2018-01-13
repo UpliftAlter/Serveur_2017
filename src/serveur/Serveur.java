@@ -105,6 +105,7 @@ public class Serveur {
 	public void addPendingMessage (int idUser, Message message) {
 		pendingMessages.put(idUser, new ArrayList<>());
 		pendingMessages.get(idUser).add(message);
+		System.out.println("pending message :" + pendingMessages.get(idUser));
 	}
 	
 	public void removePendingMessage (int idUser) {

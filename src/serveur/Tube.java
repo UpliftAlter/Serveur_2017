@@ -5,9 +5,11 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.List;
+import java.util.Set;
 
 import classes.FilDeDiscussion;
 import classes.Message;
+import classes.Utilisateur;
 
 public class Tube implements Runnable {
 	private Serveur server;
@@ -26,6 +28,7 @@ public class Tube implements Runnable {
 	@Override
 	public void run() {
 		try {
+			sendingPendingMessages();
 			while (true) {
 				receive();
 			}
@@ -38,6 +41,21 @@ public class Tube implements Runnable {
 
 	}
 
+	private void sendingPendingMessages() {
+		System.out.println("h");
+		Set<Integer> idUsersCollection = server.getPendingMessages().keySet();
+		System.out.println("e");
+		if(idUsersCollection.contains(idUser)) {
+			System.out.println("y");
+			List<Message> listPendingMessages = server.getPendingMessages().get(idUser);
+			for (Message pendingMessage : listPendingMessages) {
+				System.out.println("!");
+				send(pendingMessage);
+			}
+		}
+
+	}
+	
 	public void receive() throws IOException, ClassNotFoundException {
 		
 		if (socket.isConnected()) {
