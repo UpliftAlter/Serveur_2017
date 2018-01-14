@@ -98,4 +98,9 @@ public class Tube implements Runnable {
 		for (Socket stemp : list)
 			send(stemp, msgtobroad);
 	}
+	public void broadcast(List<Socket> list, Object object) {
+		System.out.println("heeey");
+		for (Socket stemp : list)
+			send(stemp, object);
+	}
 }
