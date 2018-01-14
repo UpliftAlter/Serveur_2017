@@ -44,12 +44,6 @@ public class GestionMessage {
 	}
 
 	public void message(Message message) {
-		
-		try {
-			System.out.println(message.getIdFil());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		switch (message.getType()) {
 		case REQUETE_INIT_FDD:
 			gererInitFDD(message);
@@ -77,7 +71,7 @@ public class GestionMessage {
 		List<Socket> listeSocket = createListSocketFromMessage(message);
 
 		try {
-			database.loadFil(message.getIdFil()).addMessage(message);
+			database.addMessageToFil(message.getIdFil(), message);
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 		}
@@ -85,6 +79,7 @@ public class GestionMessage {
 		message.setType(TypeMessage.RECEIVED);
 		Utilisateur user = message.getAuteur();
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+		System.out.println("Id msg server: " + message.getIdMsg());
 		tube.send(socketTemp, message);
 	}
 
