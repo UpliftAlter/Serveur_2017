@@ -9,6 +9,7 @@ import classes.DataBaseException;
 import classes.FilDeDiscussion;
 import classes.Groupe;
 import classes.Message;
+import classes.Pair;
 import classes.TypeMessage;
 import classes.Utilisateur;
 
@@ -32,15 +33,61 @@ public class GestionMessage {
 	public void filDeDiscussion(FilDeDiscussion fdd) {
 
 		try {
+			Message message = fdd.getConversation().get(0);
+			int idMessage = message.getIdMsg();
 			database.addFilDeDiscussion(fdd);
-			database.addMessageToFil(fdd.getIdFil(), fdd.getConversation().get(0));
+			database.addMessageToFil(fdd.getIdFil(), message);
+			for (Utilisateur utilisateur : database.getUsersFromGroup(fdd.getGroupe().getIdGroupe())) {
+				Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(utilisateur,
+						TypeMessage.PENDING);
+				server.addEtatMessage(idMessage, paire);
+			}
+
+			Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(fdd.getCreateur(),
+					TypeMessage.READ);
+
+			server.addEtatMessage(idMessage, paire);
 		} catch (DataBaseException e) {
 			System.out.println("Erreur ajout fdd dans gerer message cote serveur");
 		}
-		List<Socket> listeSocket = createListSocketFromMessage(fdd.getConversation().get(0));
+
+		List<Socket> listeSocket = createListSocketFromMessage(fdd);
 
 		tube.broadcast(listeSocket, fdd);
 		tube.broadcast(listeSocket, fdd.getConversation().get(0));
+		Message temp = fdd.getConversation().get(0);
+		System.out.println("Id du message: " + temp.getIdMsg());
+		temp.setType(TypeMessage.RECEIVED);
+		temp.setIdFil(fdd.getIdFil());
+		Utilisateur user = temp.getAuteur();
+		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+		tube.send(socketTemp, temp);
+
+	}
+
+	private List<Socket> createListSocketFromMessage(FilDeDiscussion fdd) {
+		List<Utilisateur> listUsersInGroup = null;
+		List<Socket> listeSocket = new ArrayList<>();
+
+		try {
+			listUsersInGroup = database.getUsersFromGroup(fdd.getGroupe().getIdGroupe());
+		} catch (Exception e1) {
+			System.out.println("Pb retrieve list user from id group");
+		}
+		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
+			for (Utilisateur user : listUsersInGroup) {
+				Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+				if (socketTemp != null)
+					listeSocket.add(socketTemp);
+
+			}
+		}
+
+		Utilisateur user = fdd.getCreateur();
+		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
+		if (socketTemp != null && !listeSocket.contains(socketTemp))
+			listeSocket.add(socketTemp);
+		return listeSocket;
 	}
 
 	public void message(Message message) {
@@ -63,6 +110,10 @@ public class GestionMessage {
 	}
 
 	private void gererMessageRead(Message message) {
+		Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(message.getAuteur(),
+				TypeMessage.READ);
+
+		server.addEtatMessage(message.getIdMsg(), paire);
 		tube.broadcast(createListSocketFromMessage(message), message);
 
 	}
@@ -79,7 +130,6 @@ public class GestionMessage {
 		message.setType(TypeMessage.RECEIVED);
 		Utilisateur user = message.getAuteur();
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
-		System.out.println("Id msg server: " + message.getIdMsg());
 		tube.send(socketTemp, message);
 	}
 
@@ -89,12 +139,14 @@ public class GestionMessage {
 		List<Socket> listeSocket = new ArrayList<>();
 		try {
 			fdd = database.loadFil(message.getIdFil());
-
-		} catch (DataBaseException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			System.out.println("là cette fois ci");
 		}
-		if (fdd != null) {
-			listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
+		try {
+
+			listUsersInGroup = database.getUsersFromGroup(fdd.getGroupe().getIdGroupe());
+		} catch (Exception e1) {
+			System.out.println("Pb retrieve list user from id group");
 		}
 		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
 			for (Utilisateur user : listUsersInGroup) {

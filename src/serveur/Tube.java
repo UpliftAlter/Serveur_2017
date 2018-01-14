@@ -18,7 +18,7 @@ public class Tube implements Runnable {
 	private ObjectOutputStream outputToClient;
 	private GestionMessage gestionMessage;
 	private int idUser;
-	
+
 	public Tube(Serveur server, Socket s, int idUser) {
 		this.server = server;
 		this.socket = s;
@@ -44,7 +44,7 @@ public class Tube implements Runnable {
 		System.out.println("h");
 		Set<Integer> idUsersCollection = server.getPendingMessages().keySet();
 		System.out.println("e");
-		if(idUsersCollection.contains(idUser)) {
+		if (idUsersCollection.contains(idUser)) {
 			System.out.println("y");
 			List<Message> listPendingMessages = server.getPendingMessages().get(idUser);
 			for (Message pendingMessage : listPendingMessages) {
@@ -54,9 +54,9 @@ public class Tube implements Runnable {
 		}
 
 	}
-	
+
 	public void receive() throws IOException, ClassNotFoundException {
-		
+
 		if (socket.isConnected()) {
 			inputFromClient = new ObjectInputStream(socket.getInputStream());
 			System.out.println("Receive in server");
@@ -67,7 +67,9 @@ public class Tube implements Runnable {
 					gestionMessage.message(message);
 				} else if (temp instanceof FilDeDiscussion) {
 					FilDeDiscussion fdd = (FilDeDiscussion) temp;
+					System.out.println("SPY :) :" + fdd.getIdFil());
 					gestionMessage.filDeDiscussion(fdd);
+					System.out.println("SPY2 :) :" + fdd.getIdFil());
 				}
 			}
 		}
@@ -82,7 +84,7 @@ public class Tube implements Runnable {
 			System.out.println("Error sending message classic to client");
 		}
 	}
-	
+
 	public void send(Socket client, Object object) {
 		try {
 			outputToClient = new ObjectOutputStream(client.getOutputStream());
@@ -98,6 +100,7 @@ public class Tube implements Runnable {
 		for (Socket stemp : list)
 			send(stemp, msgtobroad);
 	}
+
 	public void broadcast(List<Socket> list, Object object) {
 		System.out.println("heeey");
 		for (Socket stemp : list)

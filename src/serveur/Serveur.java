@@ -75,7 +75,8 @@ public class Serveur {
 	public ServerSocket getSocket() {
 		return server;
 	}
-//----------------------------------------------------------------------------------------
+
+	// ----------------------------------------------------------------------------------------
 	public Map<Integer, Socket> getOnlineUsers() {
 		return onlineUsers;
 	}
@@ -86,6 +87,58 @@ public class Serveur {
 
 	public void setEtatRecepetionMessages(Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages) {
 		this.etatRecepetionMessages = etatRecepetionMessages;
+	}
+
+	public void addEtatMessage(int idMessage, Pair<Utilisateur, TypeMessage> etatReception) {
+		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
+		for (Pair<Utilisateur, TypeMessage> pair : newList) {
+			if(pair.getLeft().getIdUser()==etatReception.getLeft().getIdUser())	{
+				newList.set(newList.indexOf(pair), new Pair<Utilisateur, TypeMessage>(pair.getLeft(), etatReception.getRight()));
+			}
+		}
+		//newList.add(etatReception);
+		etatRecepetionMessages.replace(idMessage, newList);
+	}
+
+	public TypeMessage getEtatFromMessageUser(int idMessage, int idUser) {
+		TypeMessage res = null;
+		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
+		for (Pair<Utilisateur, TypeMessage> pair : newList) {
+			if (pair.getLeft().getIdUser() == idUser) {
+				return pair.getRight();
+			}
+		}
+		return res;
+	}
+
+	public boolean isMessageReceived(int idMessage) {
+		boolean res = false;
+		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
+		for (Pair<Utilisateur, TypeMessage> pair : newList) {
+			res = res || pair.getRight().equals(TypeMessage.RECEIVED);
+		}
+
+		return res;
+	}
+
+	public boolean isMessageRead(int idMessage) {
+		boolean res = false;
+		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
+		for (Pair<Utilisateur, TypeMessage> pair : newList) {
+			res = res || pair.getRight().equals(TypeMessage.READ);
+		}
+
+		return res;
+	}
+
+	public boolean isMessageReadByAll(int idMessage) {
+		boolean res = false;
+		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
+		for (Pair<Utilisateur, TypeMessage> pair : newList) {
+			res = res && (pair.getRight().equals(TypeMessage.READ) || pair.getRight().equals(TypeMessage.READ_BY_ALL));
+		}
+
+		return res;
 	}
 
 	public Map<Integer, List<Message>> getPendingMessages() {
@@ -102,16 +155,17 @@ public class Serveur {
 		System.out.println(onlineUsers);
 	}
 
-	public void addPendingMessage (int idUser, Message message) {
+	public void addPendingMessage(int idUser, Message message) {
 		pendingMessages.put(idUser, new ArrayList<>());
 		pendingMessages.get(idUser).add(message);
 		System.out.println("pending message :" + pendingMessages.get(idUser));
 	}
-	
-	public void removePendingMessage (int idUser) {
+
+	public void removePendingMessage(int idUser) {
 		pendingMessages.remove(idUser);
 	}
-//-----------------------------------------------------------------------------------------	
+
+	// -----------------------------------------------------------------------------------------
 	public void disconnect() throws IOException {
 		server.close();
 	}
@@ -122,7 +176,6 @@ public class Serveur {
 			try {
 				database.addGroupBD(g);
 			} catch (DataBaseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -134,7 +187,6 @@ public class Serveur {
 			try {
 				database.addUserBD(u);
 			} catch (DataBaseException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
@@ -145,7 +197,6 @@ public class Serveur {
 		try {
 			database.removeUserBD(u);
 		} catch (DataBaseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -164,7 +215,6 @@ public class Serveur {
 		try {
 			database.removeGroupBD(g.getIdGroupe());
 		} catch (DataBaseException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
