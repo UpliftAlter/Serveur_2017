@@ -35,23 +35,23 @@ public class GestionMessage {
 		try {
 			database.addFilDeDiscussion(fdd);
 			database.addMessageToFil(fdd.getIdFil(), fdd.getConversation().get(0));
-			
+
 		} catch (DataBaseException e) {
 			System.out.println("Erreur ajout fdd dans gerer message cote serveur");
 		}
 		listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
-		
+
 		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
 			for (Utilisateur user : listUsersInGroup) {
 				Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
 				if (socketTemp != null) {
 					listeSocket.add(socketTemp);
-				} 
+				}
 			}
 		}
 		Utilisateur user = database.UtilisateurFromID(fdd.getCreateur().getIdUser());
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
-		if (socketTemp != null && !listeSocket.contains(socketTemp)) 
+		if (socketTemp != null && !listeSocket.contains(socketTemp))
 			listeSocket.add(socketTemp);
 		tube.broadcast(listeSocket, fdd.getConversation().get(0));
 	}
@@ -73,14 +73,18 @@ public class GestionMessage {
 	}
 
 	private void gererMessage(Message message) {
-		FilDeDiscussion fdd;
+		FilDeDiscussion fdd = null;
 		List<Utilisateur> listUsersInGroup = null;
 		List<Socket> listeSocket = new ArrayList<>();
 		try {
 			fdd = database.loadFil(message.getIdFil());
-			listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
+
 		} catch (DataBaseException e) {
 			e.printStackTrace();
+		}
+		if (fdd != null) {
+			fdd.addMessage(message);
+			listUsersInGroup = fdd.getGroupe().getListeUtilisateur();
 		}
 		
 		if (!listUsersInGroup.isEmpty() && listUsersInGroup != null) {
@@ -93,11 +97,13 @@ public class GestionMessage {
 				}
 			}
 		}
-		Utilisateur user = database.UtilisateurFromID(message.getAuteur().getIdUser());
+		Utilisateur user = fdd.getCreateur();
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
-		if (socketTemp != null && !listeSocket.contains(socketTemp)) 
+		System.out.println("Gerer message "+ user);
+		if (socketTemp != null && !listeSocket.contains(socketTemp)) {
 			listeSocket.add(socketTemp);
-
+			System.out.println("C'est added !!");
+		}
 		tube.broadcast(listeSocket, message);
 	}
 

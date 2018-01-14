@@ -28,7 +28,6 @@ public class Tube implements Runnable {
 	@Override
 	public void run() {
 		try {
-			
 			while (true) {
 				receive();
 			}
