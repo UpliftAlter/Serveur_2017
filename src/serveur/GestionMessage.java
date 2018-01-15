@@ -91,6 +91,12 @@ public class GestionMessage {
 	}
 
 	public void message(Message message) {
+		
+		try {
+			System.out.println(message.getIdFil());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		switch (message.getType()) {
 		case REQUETE_INIT_FDD:
 			gererInitFDD(message);
@@ -122,7 +128,7 @@ public class GestionMessage {
 		List<Socket> listeSocket = createListSocketFromMessage(message);
 
 		try {
-			database.addMessageToFil(message.getIdFil(), message);
+			database.loadFil(message.getIdFil()).addMessage(message);
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 		}
