@@ -16,9 +16,9 @@ import classes.Utilisateur;
 @SuppressWarnings({ "serial" })
 class RenduUtilisateurCell extends DefaultListCellRenderer {
 	private JLabel label = new JLabel();
-	private ImageIcon userRouge = new ImageIcon("userRouge.png");
-	private ImageIcon userBleu = new ImageIcon("userBleu.png");
-	private ImageIcon userVert = new ImageIcon("userVert.png");
+	private ImageIcon userRouge = new ImageIcon(RenduUtilisateurCell.class.getResource("/imgs/userRouge.png"));
+	private ImageIcon userBleu = new ImageIcon(RenduUtilisateurCell.class.getResource("/imgs/userBleu.png"));
+	private ImageIcon userVert = new ImageIcon(RenduUtilisateurCell.class.getResource("/imgs/userVert.png"));
 	private ImageIcon[] tabIcon = { userBleu, userRouge, userVert };
 	private Color textSelectionColor = Color.BLACK;
 	private Color backgroundSelectionColor = new Color(204, 230, 255);
