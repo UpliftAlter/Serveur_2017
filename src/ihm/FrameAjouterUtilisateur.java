@@ -9,6 +9,8 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import classes.Agent;
+import classes.DB;
+import classes.DataBaseException;
 import classes.Enseignant;
 import classes.Etudiant;
 import classes.TypeUtilisateur;
@@ -32,6 +34,7 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	private JComboBox<String> statusComboBox = new JComboBox<>();
 	private FrameServeur frameServeur;
 	private boolean modifyOrAdd = true;
+	DB database = new DB();
 
 	public FrameAjouterUtilisateur(FrameServeur frameServeur) {
 		this.frameServeur = frameServeur;
@@ -177,37 +180,43 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 		Utilisateur u = null;
 		if (checkFields()) {
 			if (modifyOrAdd) {
-			switch (getComboBoxValue()) {
-			case ETUDIANT:
-				u = new Etudiant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
-						passwordTextField.getText());
-				break;
-			case ENSEIGNANT:
-				u = new Enseignant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
-						passwordTextField.getText());
-				break;
-			case ADMINISTRATIF:
-				u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
-						passwordTextField.getText(), TypeUtilisateur.ADMINISTRATIF);
-				break;
-			case TECHNIQUE:
-				u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
-						passwordTextField.getText(), TypeUtilisateur.TECHNIQUE);
-				break;
+				switch (getComboBoxValue()) {
+				case ETUDIANT:
+					u = new Etudiant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
+							passwordTextField.getText());
+					break;
+				case ENSEIGNANT:
+					u = new Enseignant(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
+							passwordTextField.getText());
+					break;
+				case ADMINISTRATIF:
+					u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
+							passwordTextField.getText(), TypeUtilisateur.ADMINISTRATIF);
+					break;
+				case TECHNIQUE:
+					u = new Agent(nomTextField.getText(), prenomTextField.getText(), usernameTextField.getText(),
+							passwordTextField.getText(), TypeUtilisateur.TECHNIQUE);
+					break;
 
-			default:
-				break;
-			}
-			
+				default:
+					break;
+				}
+
 				frameServeur.getServeur().addUser(u);
 				frameServeur.getPanelGroupe().getGroupeSelected().addMember(u);
 				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
 			} else {
 				Utilisateur temp = frameServeur.getPanelUtilisateur().getSelectedUser();
+	
 				temp.setNom(nomTextField.getText());
 				temp.setPrenom(prenomTextField.getText());
 				temp.setMdp(passwordTextField.getText());
 				temp.setLogin(usernameTextField.getText());
+				try {
+					database.updateUser(temp);
+				} catch (DataBaseException e) {
+					e.printStackTrace();
+				}
 				frameServeur.getPanelUtilisateur().initModel(frameServeur.getPanelGroupe().getGroupeSelected());
 			}
 			dispose();
@@ -264,13 +273,13 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 		passwordTextField.setText("");
 	}
 
-	public void setModifyOrAdd (boolean b) {
+	public void setModifyOrAdd(boolean b) {
 		modifyOrAdd = b;
 		statusComboBox.setEnabled(b);
-		if(b) 
+		if (b)
 			creerButton.setText("Creer");
 		else
 			creerButton.setText("Modifier");
-		
+
 	}
 }
