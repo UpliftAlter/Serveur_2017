@@ -1,6 +1,7 @@
 package ihm;
 
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
 import java.io.IOException;
 import java.util.List;
 
@@ -8,8 +9,11 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 
+import classes.DB;
+import classes.DataBaseException;
 import classes.Groupe;
 import classes.Utilisateur;
 import serveur.Serveur;
@@ -26,6 +30,7 @@ public class FrameServeur extends JFrame {
 	private PanelGroupe panelGroupe;
 	private PanelUtilisateur panelUtilisateur;
 	private Serveur serveur;
+	private DB database = new DB();
 
 	public FrameServeur(Serveur serveur) {
 		this.serveur = serveur;
@@ -60,7 +65,9 @@ public class FrameServeur extends JFrame {
 		fichierMenu.add(quitter);
 		creerUtilisateur.setEnabled(false);
 		ajouterMembre.setEnabled(false);
+	
 		menuBar.add(fichierMenu);
+		
 		setJMenuBar(menuBar);
 		
 
@@ -81,6 +88,8 @@ public class FrameServeur extends JFrame {
 			}
 		});
 
+		
+		
         creerUtilisateur.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 creerUtilisateurActionPerformed(evt);
