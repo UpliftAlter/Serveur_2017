@@ -67,9 +67,7 @@ public class Tube implements Runnable {
 					gestionMessage.message(message);
 				} else if (temp instanceof FilDeDiscussion) {
 					FilDeDiscussion fdd = (FilDeDiscussion) temp;
-					System.out.println("SPY :) :" + fdd.getIdFil());
 					gestionMessage.filDeDiscussion(fdd);
-					System.out.println("SPY2 :) :" + fdd.getIdFil());
 				}
 			}
 		}

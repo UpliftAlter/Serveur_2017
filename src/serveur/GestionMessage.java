@@ -132,16 +132,22 @@ public class GestionMessage {
 			}
 		}
 
-		if (!gRef.getListeUtilisateur().contains(message.getAuteur())) {
+		if (!gRef.getListeUtilisateur().contains(fddRef.getCreateur())) {
 			if (server.getMapAllMessages().get(message.getIdMsg()).size() == gRef.getListeUtilisateur().size() + 1) {
 				message.setType(TypeMessage.READ_BY_ALL);
 				tube.broadcast(createListSocketFromMessage(message), message);
-			} 
+			} else {
+				message.setType(TypeMessage.READ);
+				tube.broadcast(createListSocketFromMessage(message), message);
+			}
 		} else {
 			if (server.getMapAllMessages().get(message.getIdMsg()).size() == gRef.getListeUtilisateur().size()) {
 				message.setType(TypeMessage.READ_BY_ALL);
 				tube.broadcast(createListSocketFromMessage(message), message);
-			} 
+			} else {
+				message.setType(TypeMessage.READ);
+				tube.broadcast(createListSocketFromMessage(message), message);
+			}
 		}
 
 	}

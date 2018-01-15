@@ -267,5 +267,10 @@ public class FrameAjouterUtilisateur extends javax.swing.JFrame {
 	public void setModifyOrAdd (boolean b) {
 		modifyOrAdd = b;
 		statusComboBox.setEnabled(b);
+		if(b) 
+			creerButton.setText("Creer");
+		else
+			creerButton.setText("Modifier");
+		
 	}
 }

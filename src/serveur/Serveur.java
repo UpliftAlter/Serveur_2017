@@ -147,7 +147,7 @@ public class Serveur {
 	public void removePendingMessage(int idUser) {
 		pendingMessages.remove(idUser);
 	}
-	
+
 	public List<FilDeDiscussion> getAllFdd() {
 		return allFdd;
 	}
@@ -271,17 +271,15 @@ public class Serveur {
 
 	}
 
-
-
 	// --------------------------------------------------------------------------------------------------------------------
 
 	public void updateMessage(Message m) {
-		System.out.println("id message: " + m.getIdMsg() + " auteur: " + m.getAuteur());
-		System.out.println(allMessages);
-		mapAllMessagesRead.get(m.getIdMsg()).add(m.getAuteur());
-
-		System.out.println("Updated");
-		System.out.println(allMessages);
+		List<?> temp = mapAllMessagesRead.get(m.getIdMsg());
+		System.out.println("Je m'en fou de ta cond: " + temp.size());
+		System.out.println(temp);
+		if (!temp.contains(m.getAuteur()))
+			mapAllMessagesRead.get(m.getIdMsg()).add(m.getAuteur());
+			
 	}
 
 	public void addNewMessage(Message m) {
