@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import classes.DB;
 import classes.DataBaseException;
+import classes.FilDeDiscussion;
 import classes.Groupe;
 import classes.Message;
 import classes.Pair;
@@ -21,12 +23,16 @@ public class Serveur {
 	private int port = 7777;
 	private ServerSocket server;
 	private ArrayList<Groupe> allGroups = new ArrayList<>();
+	private List<FilDeDiscussion> allFdd = new ArrayList<>();
 	private ArrayList<Utilisateur> allUsers = new ArrayList<>();
+	private List<Message> allMessages = new ArrayList<>();
 	private DB database = new DB();
 
 	private Map<Integer, List<Message>> pendingMessages = new HashMap<Integer, List<Message>>();
+
 	private Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages = new HashMap<Integer, List<Pair<Utilisateur, TypeMessage>>>();
 
+	private Map<Integer, List<Utilisateur>> mapAllMessagesRead = new HashMap<>();
 	// Network part
 	// private ArrayList<Socket> allSockets = new ArrayList<>();
 	// private ArrayList<Utilisateur> onlineUsers = new ArrayList<>();
@@ -37,6 +43,9 @@ public class Serveur {
 	public Serveur() throws IOException {
 		initAllGroups();
 		initAllUsers();
+		initAllFdd();
+		initAllMessages();
+		initMapAllMessage();
 		server = new ServerSocket(port);
 		System.out.println("Server is running...");
 		FrameServeur fs = new FrameServeur(this);
@@ -84,7 +93,6 @@ public class Serveur {
 	public Map<Integer, List<Pair<Utilisateur, TypeMessage>>> getEtatRecepetionMessages() {
 		return etatRecepetionMessages;
 	}
-
 
 	public boolean isMessageReceived(int idMessage) {
 		boolean res = false;
@@ -138,6 +146,22 @@ public class Serveur {
 
 	public void removePendingMessage(int idUser) {
 		pendingMessages.remove(idUser);
+	}
+	
+	public List<FilDeDiscussion> getAllFdd() {
+		return allFdd;
+	}
+
+	public void setAllFdd(List<FilDeDiscussion> allFdd) {
+		this.allFdd = allFdd;
+	}
+
+	public List<Message> getAllMessages() {
+		return allMessages;
+	}
+
+	public void setAllMessages(List<Message> allMessages) {
+		this.allMessages = allMessages;
 	}
 
 	// -----------------------------------------------------------------------------------------
@@ -216,6 +240,61 @@ public class Serveur {
 		} catch (DataBaseException e) {
 			e.printStackTrace();
 		}
+	}
+
+	private void initAllFdd() {
+		allFdd = database.getAllFilDeDiscussion();
+		System.out.println("All fdd:" + allFdd);
+	}
+
+	private void initAllMessages() {
+		allMessages = database.getAllMessages();
+		System.out.println("All Messages:" + allMessages);
+	}
+
+	public void initMapAllMessage() {
+		for (Message m : allMessages) {
+			mapAllMessagesRead.put(m.getIdMsg(), new ArrayList<Utilisateur>());
+			Groupe gRef = null;
+			FilDeDiscussion fddRef = null;
+			int idFilRef = m.getIdFil();
+			for (FilDeDiscussion fdd : allFdd) {
+				if (fdd.getIdFil() == idFilRef) {
+					gRef = fdd.getGroupe();
+					fddRef = fdd;
+				}
+			}
+			if (!gRef.getListeUtilisateur().contains(m.getAuteur()))
+				updateMessage(m);
+			mapAllMessagesRead.get(m.getIdMsg()).addAll(gRef.getListeUtilisateur());
+		}
+
+	}
+
+
+
+	// --------------------------------------------------------------------------------------------------------------------
+
+	public void updateMessage(Message m) {
+		System.out.println("id message: " + m.getIdMsg() + " auteur: " + m.getAuteur());
+		System.out.println(allMessages);
+		mapAllMessagesRead.get(m.getIdMsg()).add(m.getAuteur());
+
+		System.out.println("Updated");
+		System.out.println(allMessages);
+	}
+
+	public void addNewMessage(Message m) {
+		mapAllMessagesRead.put(m.getIdMsg(), new ArrayList<Utilisateur>());
+		System.out.println("Ajout d'un message " + m.getIdMsg());
+	}
+
+	public Map<Integer, List<Utilisateur>> getMapAllMessages() {
+		return mapAllMessagesRead;
+	}
+
+	public void setMapAllMessages(Map<Integer, List<Utilisateur>> allMessages) {
+		this.mapAllMessagesRead = mapAllMessagesRead;
 	}
 
 }
