@@ -37,16 +37,16 @@ public class GestionMessage {
 			int idMessage = message.getIdMsg();
 			database.addFilDeDiscussion(fdd);
 			database.addMessageToFil(fdd.getIdFil(), message);
-			for (Utilisateur utilisateur : database.getUsersFromGroup(fdd.getGroupe().getIdGroupe())) {
+			/*for (Utilisateur utilisateur : database.getUsersFromGroup(fdd.getGroupe().getIdGroupe())) {
 				Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(utilisateur,
 						TypeMessage.PENDING);
-				server.addEtatMessage(idMessage, paire);
-			}
+				server.addEtatMessage(idMessage, paire);*/
+			//}
 
-			Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(fdd.getCreateur(),
+			/*Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(fdd.getCreateur(),
 					TypeMessage.READ);
 
-			server.addEtatMessage(idMessage, paire);
+			server.addEtatMessage(idMessage, paire);*/
 		} catch (DataBaseException e) {
 			System.out.println("Erreur ajout fdd dans gerer message cote serveur");
 		}
@@ -116,10 +116,10 @@ public class GestionMessage {
 	}
 
 	private void gererMessageRead(Message message) {
-		Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(message.getAuteur(),
+		/*Pair<Utilisateur, TypeMessage> paire = new Pair<Utilisateur, TypeMessage>(message.getAuteur(),
 				TypeMessage.READ);
 
-		server.addEtatMessage(message.getIdMsg(), paire);
+		server.addEtatMessage(message.getIdMsg(), paire);*/
 		tube.broadcast(createListSocketFromMessage(message), message);
 
 	}
@@ -134,6 +134,7 @@ public class GestionMessage {
 		}
 		tube.broadcast(listeSocket, message);
 		message.setType(TypeMessage.RECEIVED);
+		System.out.println("hey: " + message.getIdMsg());
 		Utilisateur user = message.getAuteur();
 		Socket socketTemp = server.getOnlineUsers().get(user.getIdUser());
 		tube.send(socketTemp, message);

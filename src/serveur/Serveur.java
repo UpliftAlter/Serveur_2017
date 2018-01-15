@@ -85,31 +85,6 @@ public class Serveur {
 		return etatRecepetionMessages;
 	}
 
-	public void setEtatRecepetionMessages(Map<Integer, List<Pair<Utilisateur, TypeMessage>>> etatRecepetionMessages) {
-		this.etatRecepetionMessages = etatRecepetionMessages;
-	}
-
-	public void addEtatMessage(int idMessage, Pair<Utilisateur, TypeMessage> etatReception) {
-		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
-		for (Pair<Utilisateur, TypeMessage> pair : newList) {
-			if(pair.getLeft().getIdUser()==etatReception.getLeft().getIdUser())	{
-				newList.set(newList.indexOf(pair), new Pair<Utilisateur, TypeMessage>(pair.getLeft(), etatReception.getRight()));
-			}
-		}
-		//newList.add(etatReception);
-		etatRecepetionMessages.replace(idMessage, newList);
-	}
-
-	public TypeMessage getEtatFromMessageUser(int idMessage, int idUser) {
-		TypeMessage res = null;
-		List<Pair<Utilisateur, TypeMessage>> newList = etatRecepetionMessages.get(idMessage);
-		for (Pair<Utilisateur, TypeMessage> pair : newList) {
-			if (pair.getLeft().getIdUser() == idUser) {
-				return pair.getRight();
-			}
-		}
-		return res;
-	}
 
 	public boolean isMessageReceived(int idMessage) {
 		boolean res = false;
